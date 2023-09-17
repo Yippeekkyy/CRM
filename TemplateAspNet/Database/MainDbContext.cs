@@ -16,6 +16,13 @@ namespace MyCRM.Database
         public DbSet<Waiter> Waiter { get; set; }
         public DbSet<WaiterSchedule> WaiterSchedule { get; set; }
 
+        public DbSet<TableSchedule> TableSchedule { get; set; }
+        public DbSet<Table> Table { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<Ingridient> Ingridient { get; set; }
+        public DbSet<Dish> Dish { get; set; }
+        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Assembly assemblyWithConfigurations = GetType().Assembly; //get whatever assembly you want
