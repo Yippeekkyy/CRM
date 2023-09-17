@@ -8,5 +8,6 @@ public class UnitTest1
     {
         var test = true;
         Assert.True(test);
+        var a = 123;
     }
 }
