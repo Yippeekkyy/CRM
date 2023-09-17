@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TemplateAspNet.Database;
-using TemplateAspNet.Model;
+using MyCRM.Database;
+using MyCRM.Model;
 
-namespace TemplateAspNet.Controllers
+namespace MyCRM.Controllers
 {
     [ApiController]
     [Route("[controller]")]

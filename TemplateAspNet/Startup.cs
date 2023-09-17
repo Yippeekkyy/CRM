@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TemplateAspNet.Database;
+using MyCRM.Database;
 
-namespace TemplateAspNet
+namespace MyCRM
 {
     public class Startup
     {

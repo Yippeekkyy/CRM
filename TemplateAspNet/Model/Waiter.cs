@@ -1,4 +1,4 @@
-namespace TemplateAspNet.Model;
+namespace MyCRM.Model;
 
 public class Waiter
 {
@@ -10,4 +10,5 @@ public class Waiter
 
     public List<WaiterSchedule> WaiterSchedules { get; set; } = new();
     public List<Order> Orders { get; set; } = new();
+
 }
