@@ -1,4 +1,4 @@
-﻿namespace TemplateAspNet.Model
+﻿namespace MyCRM.Model
 {
     public class WaiterSchedule
     {

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore;
-using TemplateAspNet;
+using MyCRM;
 
 public class Program
 {

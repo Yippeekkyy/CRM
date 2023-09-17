@@ -1,9 +1,9 @@
 ﻿using System.Reflection.Emit;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using TemplateAspNet.Model;
+using MyCRM.Model;
 
-namespace TemplateAspNet.Database
+namespace MyCRM.Database
 {
     public class MainDbContext : DbContext
     {

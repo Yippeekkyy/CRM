@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TemplateAspNet.Model;
+using MyCRM.Model;
 
-namespace TemplateAspNet.Database.Configuration
+namespace MyCRM.Database.Configuration
 {
     public class WaiterConfiguration : IEntityTypeConfiguration<Waiter>
     {
