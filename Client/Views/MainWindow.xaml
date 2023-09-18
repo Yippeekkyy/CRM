@@ -6,7 +6,35 @@
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Buttons.xaml" />
+        
+
+    </Window.Resources>
     <Grid>
-        <Button Content="Test" Command="{Binding SomeCommand}" Margin="50" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+            <Canvas Grid.Row ="0" Grid.Column="0" Background="Black" Grid.RowSpan="2" HorizontalAlignment="Stretch">
+                <StaticResource>
+                    <StaticResource.ResourceKey>TableButton</StaticResource.ResourceKey>
+                </StaticResource>
+            </Canvas>
+         
+            <Canvas Grid.Row="2" Grid.Column="0" Background="Orange" HorizontalAlignment="Stretch">
+                <StaticResource>
+                    <StaticResource.ResourceKey>PanelButtons</StaticResource.ResourceKey>
+                </StaticResource>
+            </Canvas>
+            <Canvas Grid.Row="0" Grid.Column="1" Background="Green" Grid.RowSpan="3"></Canvas>
+        
+
+        
     </Grid>
 </Window>
