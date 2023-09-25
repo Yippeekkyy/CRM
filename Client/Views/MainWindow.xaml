@@ -13,26 +13,21 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-            <Canvas Grid.Row ="0" Grid.Column="0" Background="GhostWhite" Grid.RowSpan="2" HorizontalAlignment="Stretch">
-                <StaticResource>
-                    <StaticResource.ResourceKey>TableButton</StaticResource.ResourceKey>
-                </StaticResource>
-            </Canvas>
-         
-            <Canvas x:Name="Canvas1" Grid.Row="2" Grid.Column="0" Background="Orange" HorizontalAlignment="Stretch" Visibility="{Binding CanvasVisibility}">
-                <StaticResource>
-                    <StaticResource.ResourceKey>PanelButtons</StaticResource.ResourceKey>
-                </StaticResource>
-            </Canvas>
-            <Canvas Grid.Row="0" Grid.Column="1" Background="Green" Grid.RowSpan="3"></Canvas>
+        <ListBox Grid.Column="0" Background="Black" >
+            
+            <ListBoxItem  Content="{StaticResource TableStackPanel}" ></ListBoxItem>
+            <ListBoxItem  Content="{StaticResource TableStackPanel2}" ></ListBoxItem>
+            <ListBoxItem  Content="{StaticResource TableStackPanel3}" ></ListBoxItem>
+            <ListBoxItem  Content="{StaticResource TableStackPanel4}" ></ListBoxItem>
+            <ListBoxItem  Content="{StaticResource TableStackPanel5}" ></ListBoxItem>
+
+
+        </ListBox>
+
+            <Canvas  Grid.Column="1" Background="LightYellow" />
         
 
         

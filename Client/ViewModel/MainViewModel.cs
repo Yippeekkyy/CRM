@@ -1,35 +1,16 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Client.Base;
 using Client.Commands;
 
 namespace Client.ViewModel;
 
-public class MainViewModel : BaseViewModel,INotifyPropertyChanged
+public class MainViewModel : BaseViewModel
 {
-    public TriggerCommand SomeCommand { get; set; }
-
-    private TriggerCommand _showCanvasCommand;
-
-    public TriggerCommand ShowCanvasCommand
-    {
-        get => _showCanvasCommand;
-        set => _showCanvasCommand = value;
-    }
-
-    private Visibility _canvasVisibility;
+    public TriggerCommand SomeCommand { get; set; } 
     
-    public Visibility CanvasVisibility
-    {
-        get { return _canvasVisibility; }
-        set
-        {
-            _canvasVisibility = value;
-            OnPropertyChanged(nameof(CanvasVisibility));
-        }
-    }
-
+    
+   
     
     public static MainViewModel _instance;
     
@@ -53,9 +34,7 @@ public class MainViewModel : BaseViewModel,INotifyPropertyChanged
     private void InitializeCommands()
     {
         SomeCommand = new TriggerCommand(NewTableSomeCommand);
-        ShowCanvasCommand = new TriggerCommand(ShowCanvas);
-        CanvasVisibility = Visibility.Collapsed;
-        
+
     }
     
 
@@ -66,15 +45,5 @@ public class MainViewModel : BaseViewModel,INotifyPropertyChanged
         newTableWindow.Show();
     }
 
-    private void ShowCanvas()
-    {
-        
-        CanvasVisibility = Visibility.Visible;
-    }
-    public event PropertyChangedEventHandler PropertyChanged;
 
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 }

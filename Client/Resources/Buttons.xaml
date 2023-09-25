@@ -8,32 +8,73 @@
     <Button  Content="Order" Background="CornflowerBlue" Command="{Binding SomeCommand}" Width="60" Height="60"  Margin ="380 40 0 0" />
     </Canvas>
     
-    <Canvas x:Key="TableButton">
-       
-   
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="80 40 0 0" >
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/> 
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60"  Margin ="180 40 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/> 
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="280 40 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/> 
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="380 40 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/>
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="80 120 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/>
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="180 120 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/>
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="280 120 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/>
-        </Canvas>
-        <Canvas Grid.Column="0" Grid.Row="0" Background="Black" Height="60" Width="60" Margin ="380 120 0 0">
-            <Button Height="60" Width="60" Background="Red" Opacity="0.1" Command="{Binding ShowCanvasCommand}"/>
-        </Canvas>
-    </Canvas>
+
+    
+    
+
+            
+            <Grid x:Key="TableStackPanel" Background="LightYellow" Width="508" Height="80" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Width="50" Height="50" />
+                <Button Grid.Column="2" Content="Open" Command="{Binding SomeCommand}" Width="50" Height="50"/>
+                <Button Grid.Column="3" Width="50" Height="50"/>
+            </Grid>
+    <Grid x:Key="TableStackPanel2" Background="LightYellow" Width="508" Height="80" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Width="50" Height="50" />
+        <Button Grid.Column="2" Content="Open" Command="{Binding SomeCommand}" Width="50" Height="50"/>
+        <Button Grid.Column="3" Width="50" Height="50"/>
+    </Grid>
+    <Grid x:Key="TableStackPanel3" Background="LightYellow" Width="508" Height="80" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Width="50" Height="50" />
+        <Button Grid.Column="2" Content="Open" Command="{Binding SomeCommand}" Width="50" Height="50"/>
+        <Button Grid.Column="3" Width="50" Height="50"/>
+    </Grid>
+    <Grid x:Key="TableStackPanel4" Background="LightYellow" Width="508" Height="80" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Width="50" Height="50" />
+        <Button Grid.Column="2" Content="Open" Command="{Binding SomeCommand}" Width="50" Height="50"/>
+        <Button Grid.Column="3" Width="50" Height="50"/>
+    </Grid>
+    <Grid x:Key="TableStackPanel5" Background="LightYellow" Width="508" Height="80" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Width="50" Height="50" />
+        <Button Grid.Column="2" Content="Open" Command="{Binding SomeCommand}" Width="50" Height="50"/>
+        <Button Grid.Column="3" Width="50" Height="50"/>
+    </Grid>
+                        
+
+            
+
+            
+            
+            
+
+
 </ResourceDictionary>

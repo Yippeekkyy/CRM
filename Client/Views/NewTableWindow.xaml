@@ -9,6 +9,18 @@
     <Window.Resources>
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 200 300" Content="Горячие блюда"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 200 150" Content="Закуски"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 200 0" Content="Горячие напитки"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 200 -150" Content="Холодные напитки"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 -100 300" Content="Салаты"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 -100 150" Content="Супы"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 -100 0" Content="Алкоголь"/>
+        <Button Grid.Column="0" Width="100" Height="50" Margin="0 0 -100 -150" Content="Спец"/>
 
         
 

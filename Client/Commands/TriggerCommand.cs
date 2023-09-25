@@ -8,7 +8,6 @@ namespace Client.Commands
     public class TriggerCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
-
         private Action _action;
 
         public TriggerCommand(Action action)
