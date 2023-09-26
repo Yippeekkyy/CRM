@@ -8,4 +8,5 @@ public class Dish
 
     public List<Order> Orders { get; set; } = new();
     public List<Ingridient> Ingridients { get; set; } = new();
+    public List<Category> Categories { get; set; } = new();
 }

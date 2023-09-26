@@ -21,6 +21,7 @@ namespace MyCRM.Database
         public DbSet<Order> Order { get; set; }
         public DbSet<Ingridient> Ingridient { get; set; }
         public DbSet<Dish> Dish { get; set; }
+        public DbSet<Category> Category { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
