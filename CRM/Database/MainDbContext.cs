@@ -9,7 +9,7 @@ namespace MyCRM.Database
     {
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
