@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyCRM.Database;
+using MyCRM.Repositories;
 
 namespace MyCRM
 {
@@ -24,8 +25,10 @@ namespace MyCRM
        //     services.AddMediatR(typeof(Startup));
             services.AddSwaggerGen();
 
-
-           AddDbContext(services);
+            AddDbContext(services);
+            services.AddTransient<WaiterRepository>();
+                            
+          
 
 
 

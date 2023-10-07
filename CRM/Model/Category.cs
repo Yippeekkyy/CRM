@@ -1,11 +1,9 @@
 ﻿namespace MyCRM.Model
 {
-    public class Ingridient
+    public class Category
     {
-        public int IngridientId { get; set; }
+        public int CategoryId { get; set; }
         public string Name { get; set; }
-        public int Count { get; set; }
-
         public List<Dish> Dishes { get; set; } = new();
     }
 }
