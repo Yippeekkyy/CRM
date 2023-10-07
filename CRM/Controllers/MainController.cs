@@ -19,7 +19,7 @@ namespace MyCRM.Controllers
         [HttpGet("Test")]
         public async Task<List<Waiter>> test()
         {
-            await _dbContext.Waiter.AddAsync(new Waiter()
+            await _dbContext.Waiters.AddAsync(new Waiter()
             {
                 FirstName = "john",
                 LastName = "Smith",

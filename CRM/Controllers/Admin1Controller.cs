@@ -23,24 +23,24 @@ namespace MyCRM.Controllers
 
         // GET: api/Admin1
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Waiter>>> GetWaiter()
+        public async Task<ActionResult<IEnumerable<Waiter>>> GetWaiters()
         {
-          if (_dbContext.Waiter == null)
+          if (_dbContext.Waiters == null)
           {
               return NotFound();
           }
-            return await _dbContext.Waiter.ToListAsync();
+            return await _dbContext.Waiters.ToListAsync();
         }
 
         // GET: api/Admin1/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Waiter>> GetWaiter(int id)
         {
-          if (_dbContext.Waiter == null)
+          if (_dbContext.Waiters == null)
           {
               return NotFound();
           }
-            var waiter = await _dbContext.Waiter.FindAsync(id);
+            var waiter = await _dbContext.Waiters.FindAsync(id);
 
             if (waiter == null)
             {
@@ -86,11 +86,11 @@ namespace MyCRM.Controllers
         [HttpPost]
         public async Task<ActionResult<Waiter>> PostWaiter(Waiter waiter)
         {
-          if (_dbContext.Waiter == null)
+          if (_dbContext.Waiters == null)
           {
               return Problem("Entity set 'MainDbContext.Waiter'  is null.");
           }
-            _dbContext.Waiter.Add(waiter);
+            _dbContext.Waiters.Add(waiter);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction("GetWaiter", new { id = waiter.WaiterId }, waiter);
@@ -100,17 +100,17 @@ namespace MyCRM.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWaiter(int id)
         {
-            if (_dbContext.Waiter == null)
+            if (_dbContext.Waiters == null)
             {
                 return NotFound();
             }
-            var waiter = await _dbContext.Waiter.FindAsync(id);
+            var waiter = await _dbContext.Waiters.FindAsync(id);
             if (waiter == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Waiter.Remove(waiter);
+            _dbContext.Waiters.Remove(waiter);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +118,7 @@ namespace MyCRM.Controllers
 
         private bool WaiterExists(int id)
         {
-            return (_dbContext.Waiter?.Any(e => e.WaiterId == id)).GetValueOrDefault();
+            return (_dbContext.Waiters?.Any(e => e.WaiterId == id)).GetValueOrDefault();
         }
     }
 }

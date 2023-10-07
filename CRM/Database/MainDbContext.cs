@@ -10,18 +10,18 @@ namespace MyCRM.Database
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
-        public DbSet<Waiter> Waiter { get; set; }
-        public DbSet<WaiterSchedule> WaiterSchedule { get; set; }
+        public DbSet<Waiter> Waiters { get; set; }
+        public DbSet<WaiterSchedule> WaiterSchedules { get; set; }
 
-        public DbSet<TableSchedule> TableSchedule { get; set; }
-        public DbSet<Table> Table { get; set; }
-        public DbSet<Order> Order { get; set; }
-        public DbSet<Ingridient> Ingridient { get; set; }
-        public DbSet<Dish> Dish { get; set; }
-        public DbSet<Category> Category { get; set; }
+        public DbSet<TableSchedule> TableSchedules { get; set; }
+        public DbSet<Table> Tables { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Ingridient> Ingridients { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Category> Categoryes { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
