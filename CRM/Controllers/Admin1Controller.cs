@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyCRM.Database;
 using MyCRM.Model;
+using MyCRM.Requests;
 
 namespace MyCRM.Controllers
 {
@@ -83,14 +84,22 @@ namespace MyCRM.Controllers
 
         // POST: api/Admin1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Waiter>> PostWaiter(Waiter waiter)
+        [HttpPost("CreateWaiter")]
+        public async Task<ActionResult<Waiter>> PostWaiter(AddWaiterRequest request)
         {
           if (_dbContext.Waiters == null)
           {
               return Problem("Entity set 'MainDbContext.Waiter'  is null.");
           }
-            _dbContext.Waiters.Add(waiter);
+
+          var waiter = new Waiter()
+          {
+              FirstName = request.FirstName,
+              LastName = request.LastName,
+              Patronimyc = request.Patronimyc,
+              Phone = request.Phone
+          };
+            await _dbContext.Waiters.AddAsync(waiter);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction("GetWaiter", new { id = waiter.WaiterId }, waiter);

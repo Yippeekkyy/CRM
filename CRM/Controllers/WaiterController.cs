@@ -83,7 +83,7 @@ namespace MyCRM.Controllers
 
         // POST: api/Waiter
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("CreateOrder")]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
           if (_context.Orders == null)
