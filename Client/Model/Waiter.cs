@@ -1,6 +1,6 @@
-﻿namespace MyCRM.Requests;
+﻿namespace Client.Model;
 
-public class AddWaiterRequest
+public class Waiter
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

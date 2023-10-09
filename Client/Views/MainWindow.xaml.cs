@@ -25,6 +25,12 @@ namespace Client
         {
             InitializeComponent();
             DataContext = MainViewModel.GetInstance();
+            Loaded += MainWindow_Loaded;
+        }
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+            
         }
     }
 }

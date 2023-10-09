@@ -28,7 +28,7 @@ public class WaiterTests
         {
             FirstName = "john",
             LastName = "smith",
-            Patronimyc = "Alexandrovich",
+            Patronymic = "Alexandrovich",
             Phone = 123456789
         };
         await _httpClient.PostAsJsonAsync("api/Admin1/CreateWaiter",request);
@@ -37,7 +37,7 @@ public class WaiterTests
         
         waiter.FirstName.ShouldBe(request.FirstName);
         waiter.LastName.ShouldBe(request.LastName);
-        waiter.Patronimyc.ShouldBe(request.Patronimyc);
+        waiter.Patronimyc.ShouldBe(request.Patronymic);
         waiter.Phone.ShouldBe(request.Phone);
     }
 }

@@ -16,18 +16,59 @@
             <ColumnDefinition />
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Background="Black" >
+        <TabControl>
             
-            <ListBoxItem  Content="{StaticResource TableStackPanel}" ></ListBoxItem>
-            <ListBoxItem  Content="{StaticResource TableStackPanel2}" ></ListBoxItem>
-            <ListBoxItem  Content="{StaticResource TableStackPanel3}" ></ListBoxItem>
-            <ListBoxItem  Content="{StaticResource TableStackPanel4}" ></ListBoxItem>
-            <ListBoxItem  Content="{StaticResource TableStackPanel5}" ></ListBoxItem>
+            <TabItem Header="Официанты">
+                
+                <StackPanel>
+                    
+                 <Button Width="150" Height="40" Margin="0 5"  HorizontalAlignment="Left" Command="{Binding OpenAddWaiterFormCommand}">Добавить Официанта </Button>
+                
+                <ListView ItemsSource="{Binding Waiters}">
+                    
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Имя" Width="46" DisplayMemberBinding="{Binding FirsName}" />
+                            <GridViewColumn Header="Фамилия" Width="60" DisplayMemberBinding="{Binding LastName}" />
+                            <GridViewColumn Header="Отчество" Width="70" DisplayMemberBinding="{Binding Patronymic}" />
+                            <GridViewColumn Header="Телефон" Width="70" DisplayMemberBinding="{Binding Phone}" />
+                            
+                            <GridViewColumn >
+                                <GridViewColumn.CellTemplate >
+                                    <DataTemplate >
+                                        <Button x:Name="EditButton" Content="Edit" Height="25" Width="40" Command="{Binding DataContext.OpenEditFormCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <GridViewColumn >
+                                <GridViewColumn.CellTemplate >
+                                    <DataTemplate >
+                                        <Button x:Name="DeleteButton" Content="Delete" Height="25" Width="40" Command="{Binding DataContext.DeleteWaiterCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                </StackPanel>
+            </TabItem>
+            
+            
+            
+            
+            <TabItem Header="Блюда">
+               
+            </TabItem>
+            
+        </TabControl>
+      
 
+       
+       
 
-        </ListBox>
-
-            <Canvas  Grid.Column="1" Background="LightYellow" />
+           
         
 
         

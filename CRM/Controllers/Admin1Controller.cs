@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MyCRM.Database;
 using MyCRM.Model;
 using MyCRM.Requests;
+using MyCRM.Responses;
 
 namespace MyCRM.Controllers
 {
@@ -23,14 +24,22 @@ namespace MyCRM.Controllers
         }
 
         // GET: api/Admin1
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Waiter>>> GetWaiters()
+        [HttpGet("GetWaiters")]
+        public async Task<ActionResult<IEnumerable<GetWaitersResponse>>> GetWaiters()
         {
           if (_dbContext.Waiters == null)
           {
               return NotFound();
           }
-            return await _dbContext.Waiters.ToListAsync();
+
+          var waiters = await _dbContext.Waiters.ToListAsync();
+
+
+          var response = new List<GetWaitersResponse>();
+
+          waiters.ForEach(i => response.Add(new GetWaitersResponse(i)));
+          
+          return response;
         }
 
         // GET: api/Admin1/5
@@ -83,7 +92,6 @@ namespace MyCRM.Controllers
         }
 
         // POST: api/Admin1
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("CreateWaiter")]
         public async Task<ActionResult<Waiter>> PostWaiter(AddWaiterRequest request)
         {
@@ -96,7 +104,7 @@ namespace MyCRM.Controllers
           {
               FirstName = request.FirstName,
               LastName = request.LastName,
-              Patronimyc = request.Patronimyc,
+              Patronimyc = request.Patronymic,
               Phone = request.Phone
           };
             await _dbContext.Waiters.AddAsync(waiter);
@@ -106,7 +114,7 @@ namespace MyCRM.Controllers
         }
 
         // DELETE: api/Admin1/5
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteWaiter/{id}")]
         public async Task<IActionResult> DeleteWaiter(int id)
         {
             if (_dbContext.Waiters == null)
