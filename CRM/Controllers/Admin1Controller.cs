@@ -137,5 +137,118 @@ namespace MyCRM.Controllers
         {
             return (_dbContext.Waiters?.Any(e => e.WaiterId == id)).GetValueOrDefault();
         }
+
+        [HttpGet("GetDishes")]
+        public async Task<ActionResult<IEnumerable<GetDishesResponse>>> GetDishes()
+        {
+            if (_dbContext.Dishes == null)
+            {
+                return NotFound();
+            }
+
+            var dishes = await _dbContext.Dishes.ToListAsync();
+
+            var response = new List<GetDishesResponse>();
+
+            dishes.ForEach(i => response.Add(new GetDishesResponse(i)));
+
+            return response;
+        }
+
+        // GET: api/Dishes/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Dish>> GetDish(int id)
+        {
+            if (_dbContext.Dishes == null)
+            {
+                return NotFound();
+            }
+            var dish = await _dbContext.Dishes.FindAsync(id);
+
+            if (dish == null)
+            {
+                return NotFound();
+            }
+
+            return dish;
+        }
+
+        // PUT: api/Dishes/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutDish(int id, Dish dish)
+        {
+            if (id != dish.DishId)
+            {
+                return BadRequest();
+            }
+
+            _dbContext.Entry(dish).State = EntityState.Modified;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DishExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Dishes
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("CreateDish")]
+        public async Task<ActionResult<Dish>> PostDish(AddDishRequest request)
+        {
+            if (_dbContext.Dishes == null)
+            {
+                return Problem("Entity set 'MainDbContext.Dishes'  is null.");
+            }
+
+            var dish = new Dish()
+            {
+                Name = request.Name,
+                Price = request.Price
+            };
+
+            await _dbContext.Dishes.AddAsync(dish);
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction("GetDish", new { id = dish.DishId }, dish);
+        }
+
+        // DELETE: api/Dishes/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDish(int id)
+        {
+            if (_dbContext.Dishes == null)
+            {
+                return NotFound();
+            }
+            var dish = await _dbContext.Dishes.FindAsync(id);
+            if (dish == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Dishes.Remove(dish);
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool DishExists(int id)
+        {
+            return (_dbContext.Dishes?.Any(e => e.DishId == id)).GetValueOrDefault();
+        }
     }
 }

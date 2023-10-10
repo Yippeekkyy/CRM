@@ -3,32 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Client.Views"
+        xmlns:local="clr-namespace:Client.Views" xmlns:viewmodel="clr-namespace:Client.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
         Title="AddWaiter" Height="350" Width="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="71*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="235*" />
+            <RowDefinition Height="33*" />
             <RowDefinition Height="20*" />
+            <RowDefinition Height="46*"/>
         </Grid.RowDefinitions>
-        <Grid Margin="10" Grid.Row="0" Grid.Column="0" >
+        <Grid Margin="10,10,10,10" Grid.Row="0" Grid.Column="0" >
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Width="258">
                 <TextBlock Text="FirstName" />
                 <TextBox Text="{Binding AddWaiterRequest.FirstName}" />
-                
+
                 <TextBlock Text="LastName" />
                 <TextBox Text="{Binding AddWaiterRequest.LastName}"/>
-                
+
                 <TextBlock Text="Patronymic" />
                 <TextBox Text="{Binding AddWaiterRequest.Patronymic}"/>
-                
+
                 <TextBlock Text="Phone" />
                 <TextBox Text="{Binding AddWaiterRequest.Phone}"/>
 
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="0" Margin="5">
+        <Grid Grid.Row="2" Grid.Column="0" Margin="5,5,5,5" Grid.RowSpan="2">
             <StackPanel Margin="0,0,10,0" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Cancel" Margin="10" Width="80"/>
                 <Button Content="Submit" Margin="10" Width="80" Command="{Binding AddWaiterCommand}"  />
