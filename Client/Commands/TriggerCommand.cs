@@ -15,6 +15,8 @@ namespace Client.Commands
             _action = action;
         }
 
+
+
         public bool CanExecute(Object parameter)
         {
             return true;
