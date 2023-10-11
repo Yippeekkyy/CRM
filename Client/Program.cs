@@ -21,12 +21,8 @@ public class Program
             .SetBasePath(Directory.GetCurrentDirectory()) // Укажите путь к файлу appsettings.json
             .AddJsonFile("appsettingsClient.json").Build();
 
-      
-        
-        var aaa = Configuration.GetSection("Backend:Host");
-        // создаем хост приложения
+ 
         var host = Host.CreateDefaultBuilder()
-            // внедряем сервисы
             .ConfigureServices(services =>
             {
                 services.AddSingleton<App>();
@@ -43,9 +39,9 @@ public class Program
 
         
         
-        // получаем сервис - объект класса App
+      
         var app = host.Services.GetService<App>();
-        // запускаем приложения
+   
         app?.Run();
     }
 }
