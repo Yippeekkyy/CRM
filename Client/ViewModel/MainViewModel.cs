@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -52,7 +53,7 @@ public class MainViewModel : BaseViewModel
         _options = options.Value;
         _httpClient = clientFactory.CreateClient("HttpClient");
         InitializeCommands();
-        InitializeViewModelAsync();
+        InitializeData();
     }
 
     private void InitializeCommands()
@@ -67,14 +68,19 @@ public class MainViewModel : BaseViewModel
     }
     
 
-    private async void InitializeViewModelAsync()
+    private async void InitializeData()
     {
-        Waiters = await GetAllWaiters();
-        Dishes = await GetAllDishes();
-        
-      
-        RaisePropertyChanged(nameof(Waiters));
-        RaisePropertyChanged(nameof(Dishes));
+        try
+        {
+            Waiters = await GetAllWaiters();
+            Dishes = await GetAllDishes();
+            RaisePropertyChanged(nameof(Waiters));
+            RaisePropertyChanged(nameof(Dishes));
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show("Ошибка соединения с Сервером");
+        }
     }
     private void NewTableSomeCommand()
     {

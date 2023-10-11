@@ -7,97 +7,65 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <ResourceDictionary Source="/Resources/Buttons.xaml" />
         
+        <Style TargetType="Button" x:Key="MenuButton">
+            <Setter Property="Background" Value="#FF1A1A1D"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Foreground" Value="#FFF1F1F1"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="#FF1A1A1D" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Left" Margin="10,0" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="#FF2D2D30"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="#FF686868"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
     </Window.Resources>
+    
+    
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
-        <TabControl>
-            
-            <TabItem Header="Официанты">
-                
-                <StackPanel>
-                    
-                 <Button Width="150" Height="40" Margin="0 5"  HorizontalAlignment="Left" Command="{Binding OpenAddWaiterFormCommand}">Добавить Официанта </Button>
-                
-                <ListView ItemsSource="{Binding Waiters}">
-                    
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Имя" Width="46" DisplayMemberBinding="{Binding FirstName}" />
-                            <GridViewColumn Header="Фамилия" Width="60" DisplayMemberBinding="{Binding LastName}" />
-                            <GridViewColumn Header="Отчество" Width="70" DisplayMemberBinding="{Binding Patronymic}" />
-                            <GridViewColumn Header="Телефон" Width="70" DisplayMemberBinding="{Binding Phone}" />
-                            
-                            <GridViewColumn >
-                                <GridViewColumn.CellTemplate >
-                                    <DataTemplate >
-                                        <Button x:Name="EditButton" Content="Edit" Height="25" Width="40" Command="{Binding DataContext.OpenEditWaiterFormCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            
-                            <GridViewColumn >
-                                <GridViewColumn.CellTemplate >
-                                    <DataTemplate >
-                                        <Button x:Name="DeleteButton" Content="Delete" Height="25" Width="40" Command="{Binding DataContext.DeleteWaiterCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                </StackPanel>
-            </TabItem>
-            
-            
-            
-            
-            <TabItem Header="Блюда" Height="20" VerticalAlignment="Top">
-                <StackPanel>
-                    <Button Width="150" Height="40" Margin="0 5"  HorizontalAlignment="Left" Command="{Binding OpenAddDishFormCommand}">Добавить блюдо</Button>
-                    <ListView ItemsSource="{Binding Dishes}">
-                        
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Название" Width="46" DisplayMemberBinding="{Binding Name}" />
-                                <GridViewColumn Header="Цена" Width="60" DisplayMemberBinding="{Binding Price}" />
-
-                                <GridViewColumn >
-                                    <GridViewColumn.CellTemplate >
-                                        <DataTemplate >
-                                            <Button x:Name="EditButton" Content="Edit" Height="25" Width="40" Command="{Binding DataContext.OpenEditFormCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-
-                                <GridViewColumn >
-                                    <GridViewColumn.CellTemplate >
-                                        <DataTemplate >
-                                            <Button x:Name="DeleteButton" Content="Delete" Height="25" Width="40" Command="{Binding DataContext.DeleteDishCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </StackPanel>
-            </TabItem>
-            
-        </TabControl>
-      
-
-       
-       
-
-           
         
-
+       
+        
+        <Rectangle Fill="#FF1A1A1D"/>
+        <StackPanel Grid.Column="0">
+            <Button Content="Админка" Click="MenuClick" Style="{StaticResource MenuButton}"  Tag="Page1"/>
+            <Button Content="Создать заказ" Click="MenuClick"  Style="{StaticResource MenuButton}" Tag="Page2"/>
+            <Button Content="Личный кабинет" Click="MenuClick"  Style="{StaticResource MenuButton}" Tag="Page3"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1">
+            <ContentControl Name="MainContentController" Margin="5" MaxWidth="550" MaxHeight="{Binding ElementName=currentWindow - 200}"/>
+        </StackPanel>
+        
+        
         
     </Grid>
 </Window>
