@@ -27,10 +27,9 @@ namespace MyCRM
 
             AddDbContext(services);
             services.AddTransient<WaiterRepository>();
-                            
-          
 
 
+            
 
         }
 
@@ -62,7 +61,7 @@ namespace MyCRM
 
         private void AddDbContext(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("local");
+            var connectionString = Configuration.GetConnectionString("local2");
   
 
             services.AddDbContext<MainDbContext>(options =>

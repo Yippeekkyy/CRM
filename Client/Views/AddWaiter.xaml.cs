@@ -5,9 +5,11 @@ namespace Client.Views;
 
 public partial class AddWaiter : Window
 {
-    public AddWaiter()
+    private MainViewModel _viewModel;
+    public AddWaiter(MainViewModel viewModel)
     {
+        _viewModel = viewModel;
         InitializeComponent();
-        DataContext = MainViewModel.GetInstance();
+        DataContext = viewModel;
     }
 }

@@ -2,7 +2,7 @@ using MyCRM.Model;
 
 namespace MyCRM.Responses;
 
-public class GetWaitersResponse
+public class GetWaiterResponse
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
@@ -11,12 +11,12 @@ public class GetWaitersResponse
     public int? Phone { get; set; }
 
 
-    public GetWaitersResponse()
+    public GetWaiterResponse()
     {
         
     }
 
-    public GetWaitersResponse(Waiter waiter)
+    public GetWaiterResponse(Waiter waiter)
     {
         Id = waiter.WaiterId;
         FirstName = waiter.FirstName;

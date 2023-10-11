@@ -14,18 +14,17 @@ namespace MyCRM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Admin1Controller : ControllerBase
+    public class AdminController : ControllerBase
     {
         private readonly MainDbContext _dbContext;
 
-        public Admin1Controller(MainDbContext dbContext)
+        public AdminController(MainDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-
-        // GET: api/Admin1
-        [HttpGet("GetWaiters")]
-        public async Task<ActionResult<IEnumerable<GetWaitersResponse>>> GetWaiters()
+        
+        [HttpGet("Waiters")]
+        public async Task<ActionResult<IEnumerable<GetWaiterResponse>>> GetWaiters()
         {
           if (_dbContext.Waiters == null)
           {
@@ -35,21 +34,16 @@ namespace MyCRM.Controllers
           var waiters = await _dbContext.Waiters.ToListAsync();
 
 
-          var response = new List<GetWaitersResponse>();
+          var response = new List<GetWaiterResponse>();
 
-          waiters.ForEach(i => response.Add(new GetWaitersResponse(i)));
+          waiters.ForEach(i => response.Add(new GetWaiterResponse(i)));
           
           return response;
         }
-
-        // GET: api/Admin1/5
-        [HttpGet("{id}")]
+        
+        [HttpGet("Waiter/{id}")]
         public async Task<ActionResult<Waiter>> GetWaiter(int id)
         {
-          if (_dbContext.Waiters == null)
-          {
-              return NotFound();
-          }
             var waiter = await _dbContext.Waiters.FindAsync(id);
 
             if (waiter == null)
@@ -59,11 +53,9 @@ namespace MyCRM.Controllers
 
             return waiter;
         }
-
-        // PUT: api/Admin1/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWaiter(int id, Waiter waiter)
+        
+        [HttpPut("Waiter/{id}")]
+        public async Task<IActionResult> PutWaiter(int id, Waiter waiter) // ToDo Переписать, метод должен принимать только id
         {
             if (id != waiter.WaiterId)
             {
@@ -90,16 +82,10 @@ namespace MyCRM.Controllers
 
             return NoContent();
         }
-
-        // POST: api/Admin1
-        [HttpPost("CreateWaiter")]
-        public async Task<ActionResult<Waiter>> PostWaiter(AddWaiterRequest request)
+        
+        [HttpPost("Waiter")]
+        public async Task<IActionResult> PostWaiter(AddWaiterRequest request)
         {
-          if (_dbContext.Waiters == null)
-          {
-              return Problem("Entity set 'MainDbContext.Waiter'  is null.");
-          }
-
           var waiter = new Waiter()
           {
               FirstName = request.FirstName,
@@ -107,14 +93,15 @@ namespace MyCRM.Controllers
               Patronimyc = request.Patronymic,
               Phone = request.Phone
           };
-            await _dbContext.Waiters.AddAsync(waiter);
+            var waiterEntity = await _dbContext.Waiters.AddAsync(waiter);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction("GetWaiter", new { id = waiter.WaiterId }, waiter);
+            var response = new GetWaiterResponse(waiterEntity.Entity);
+            
+            return Ok(response);
         }
-
-        // DELETE: api/Admin1/5
-        [HttpDelete("DeleteWaiter/{id}")]
+        
+        [HttpDelete("Waiter/{id}")]
         public async Task<IActionResult> DeleteWaiter(int id)
         {
             if (_dbContext.Waiters == null)
@@ -132,13 +119,12 @@ namespace MyCRM.Controllers
 
             return NoContent();
         }
-
-        private bool WaiterExists(int id)
-        {
-            return (_dbContext.Waiters?.Any(e => e.WaiterId == id)).GetValueOrDefault();
-        }
-
-        [HttpGet("GetDishes")]
+        
+        
+        
+        //Dishes
+        
+        [HttpGet("Dishes")]
         public async Task<ActionResult<IEnumerable<GetDishesResponse>>> GetDishes()
         {
             if (_dbContext.Dishes == null)
@@ -155,8 +141,8 @@ namespace MyCRM.Controllers
             return response;
         }
 
-        // GET: api/Dishes/5
-        [HttpGet("{id}")]
+
+        [HttpGet("Dish/{id}")]
         public async Task<ActionResult<Dish>> GetDish(int id)
         {
             if (_dbContext.Dishes == null)
@@ -173,9 +159,8 @@ namespace MyCRM.Controllers
             return dish;
         }
 
-        // PUT: api/Dishes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        
+        [HttpPut("Dish/{id}")]
         public async Task<IActionResult> PutDish(int id, Dish dish)
         {
             if (id != dish.DishId)
@@ -204,9 +189,8 @@ namespace MyCRM.Controllers
             return NoContent();
         }
 
-        // POST: api/Dishes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("CreateDish")]
+
+        [HttpPost("Dish")]
         public async Task<ActionResult<Dish>> PostDish(AddDishRequest request)
         {
             if (_dbContext.Dishes == null)
@@ -225,9 +209,9 @@ namespace MyCRM.Controllers
 
             return CreatedAtAction("GetDish", new { id = dish.DishId }, dish);
         }
-
-        // DELETE: api/Dishes/5
-        [HttpDelete("{id}")]
+        
+        
+        [HttpDelete("Dish/{id}")]
         public async Task<IActionResult> DeleteDish(int id)
         {
             if (_dbContext.Dishes == null)
@@ -246,9 +230,18 @@ namespace MyCRM.Controllers
             return NoContent();
         }
 
+        
+        
+        
         private bool DishExists(int id)
         {
             return (_dbContext.Dishes?.Any(e => e.DishId == id)).GetValueOrDefault();
         }
+        
+        private bool WaiterExists(int id)
+        {
+            return (_dbContext.Waiters?.Any(e => e.WaiterId == id)).GetValueOrDefault();
+        }
+        
     }
 }

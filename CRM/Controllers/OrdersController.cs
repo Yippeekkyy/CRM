@@ -21,7 +21,7 @@ namespace MyCRM.Controllers
             _context = context;
         }
 
-        // GET: api/Orders
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
@@ -32,7 +32,7 @@ namespace MyCRM.Controllers
             return await _context.Orders.ToListAsync();
         }
 
-        // GET: api/Orders/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
@@ -50,8 +50,7 @@ namespace MyCRM.Controllers
             return order;
         }
 
-        // PUT: api/Orders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrder(int id, Order order)
         {
@@ -81,8 +80,7 @@ namespace MyCRM.Controllers
             return NoContent();
         }
 
-        // POST: api/Orders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
@@ -96,7 +94,7 @@ namespace MyCRM.Controllers
             return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
         }
 
-        // DELETE: api/Orders/5
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {

@@ -21,10 +21,12 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private MainViewModel _viewModel;
+        public MainWindow(MainViewModel viewModel)
         {
+            _viewModel = viewModel;
             InitializeComponent();
-            DataContext = MainViewModel.GetInstance();
+            DataContext = viewModel;
             Loaded += MainWindow_Loaded;
         }
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)

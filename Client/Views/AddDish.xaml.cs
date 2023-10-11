@@ -23,7 +23,7 @@ namespace Client.Views
         public AddDish()
         {
             InitializeComponent();
-            DataContext = MainViewModel.GetInstance();
+          //  DataContext = MainViewModel.GetInstance();
 
         }
     }
