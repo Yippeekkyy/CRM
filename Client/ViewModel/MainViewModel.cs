@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,8 +17,12 @@ using Client.Options;
 using Client.Views;
 using Common;
 using Common.HandleResponses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Options;
+using MyCRM.Authorize.Responses;
+using MyCRM.Model;
 using MyCRM.Requests;
 using MyCRM.Responses;
 using Newtonsoft.Json;
@@ -26,14 +33,23 @@ public class MainViewModel : BaseViewModel
 {
     private readonly BackendOptions _options;
     private readonly HttpClient _httpClient;
-
-    public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
     
+    public string Token { get; set; }
+    
+    public event Action UpdateMainWindow;
+
+    private GetWaiterResponse _selectedWaiter { get; set; }
+
+    public User SelectedUser { get; set; } = new();
+  
+    public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
     public ObservableCollection<GetDishesResponse> Dishes { get; set; } = new();
     
 
     public AddWaiterRequest AddWaiterRequest { get; set; } = new ();
     public AddDishRequest AddDishRequest { get; set; } = new();
+    public LoginRequest LoginRequest { get; set; } = new();
+    
     
     public TriggerCommand SomeCommand { get; set; } 
     public TriggerCommand OpenAddWaiterFormCommand { get; set; }
@@ -43,9 +59,12 @@ public class MainViewModel : BaseViewModel
     public TriggerCommand OpenEditWaiterFormCommand { get; set; }
 
     public TriggerCommand<object> DeleteWaiterCommand { get; set; }
+    
+    public TriggerCommand LoginCommand { get; set; }
+    public TriggerCommand LogoutCommand { get; set; }
 
 
-
+    private MainWindow _mainWindow;
     
 
     public MainViewModel(IOptions<BackendOptions> options, IHttpClientFactory clientFactory)
@@ -65,6 +84,9 @@ public class MainViewModel : BaseViewModel
         AddWaiterCommand = new TriggerCommand(HandleAddWaiter);
         AddDishCommand = new TriggerCommand(HandleAddDish);
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
+        
+        LoginCommand = new TriggerCommand(Login);
+        LogoutCommand = new TriggerCommand(Logout);
     }
     
 
@@ -167,6 +189,31 @@ public class MainViewModel : BaseViewModel
         var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishesResponse>>(response);
 
         return responseObj;
+    }
+
+    private async void Login()
+    {
+        var response = await _httpClient.GetAsync(_options.Host + $"/api/Authorization/Login?UserId={LoginRequest.UserId}&password={LoginRequest.Password}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseObj = await ResponseHandler.DeserializeAsync<LoginResponse>(response);
+            Token = responseObj.Token;
+            
+            SelectedUser = responseObj.User;
+            LoginRequest = new LoginRequest();
+            RaisePropertyChanged(nameof(SelectedUser));
+            UpdateMainWindow.Invoke();
+        }
+        
+    }
+    
+    private void Logout()
+    {
+        SelectedUser = new User();
+        Token = null;
+        RaisePropertyChanged(nameof(SelectedUser));
+        UpdateMainWindow.Invoke();
     }
 
 }

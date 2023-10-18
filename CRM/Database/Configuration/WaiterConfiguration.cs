@@ -8,7 +8,7 @@ namespace MyCRM.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<Waiter> builder)
         {
-            builder.HasKey(i => i.WaiterId);
+          //  builder.HasKey(i => i.WaiterId);
 
          //   builder.HasMany<WaiterSchedule>().WithOne(i => i.Waiter);
 

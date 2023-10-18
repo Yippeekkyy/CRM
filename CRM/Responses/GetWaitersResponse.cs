@@ -18,10 +18,10 @@ public class GetWaiterResponse
 
     public GetWaiterResponse(Waiter waiter)
     {
-        Id = waiter.WaiterId;
+        Id = waiter.Id;
         FirstName = waiter.FirstName;
         LastName = waiter.LastName;
-        Patronymic = waiter.Patronimyc;
+        Patronymic = waiter.Patronymic;
         Phone = waiter.Phone;
     }
 }
