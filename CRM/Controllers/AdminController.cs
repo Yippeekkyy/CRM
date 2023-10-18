@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using MyCRM.Database;
 using MyCRM.Model;
 using MyCRM.Requests;
@@ -55,34 +56,22 @@ namespace MyCRM.Controllers
         }
         
         [HttpPut("Waiter/{id}")]
-        public async Task<IActionResult> PutWaiter(int id, Waiter waiter) // ToDo Переписать, метод должен принимать только id
+        public async Task<GetWaiterResponse> EditWaiter(int id, [FromBody]EditWaiterRequest waiter) // ToDo Переписать, метод должен принимать только id
         {
-            if (id != waiter.WaiterId)
-            {
-                return BadRequest();
-            }
+            var waiterToUpdate = await _dbContext.Waiters.FindAsync(id);
+            waiterToUpdate.FirstName = waiter.FirstName;
+            waiterToUpdate.LastName = waiter.LastName;
+            waiterToUpdate.Patronimyc = waiter.Patronymic;
+            waiterToUpdate.Phone = waiter.Phone;
+            
+            await _dbContext.SaveChangesAsync();
 
-            _dbContext.Entry(waiter).State = EntityState.Modified;
 
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WaiterExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var response = new GetWaiterResponse(waiterToUpdate);
+            return response;
 
-            return NoContent();
         }
-        
+
         [HttpPost("Waiter")]
         public async Task<IActionResult> PostWaiter(AddWaiterRequest request)
         {

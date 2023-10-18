@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
@@ -27,12 +28,23 @@ public class MainViewModel : BaseViewModel
     private readonly BackendOptions _options;
     private readonly HttpClient _httpClient;
 
-    public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
+
+
+    private ObservableCollection<GetWaiterResponse> _waiters;
+
+    public ObservableCollection<GetWaiterResponse> Waiters {
+        get => _waiters;
+        set 
+        {
+            _waiters = value;
+            RaisePropertyChanged(nameof(Waiters));
+        } }
     
     public ObservableCollection<GetDishesResponse> Dishes { get; set; } = new();
     
 
-    public AddWaiterRequest AddWaiterRequest { get; set; } = new ();
+    public EditWaiterRequest EditWaiterRequest { get; set; } = new ();
+    public AddWaiterRequest AddWaiterRequest { get; set; } = new();
     public AddDishRequest AddDishRequest { get; set; } = new();
     
     public TriggerCommand SomeCommand { get; set; } 
@@ -40,9 +52,10 @@ public class MainViewModel : BaseViewModel
     public TriggerCommand OpenAddDishFormCommand { get; set; }
     public TriggerCommand AddWaiterCommand { get; set; }
     public TriggerCommand AddDishCommand { get; set; }
-    public TriggerCommand OpenEditWaiterFormCommand { get; set; }
+    public TriggerCommand<object> OpenEditWaiterFormCommand { get; set; }
 
     public TriggerCommand<object> DeleteWaiterCommand { get; set; }
+    public TriggerCommand EditWaiterCommand { get; set; }
 
 
 
@@ -59,14 +72,16 @@ public class MainViewModel : BaseViewModel
     private void InitializeCommands()
     {
         SomeCommand = new TriggerCommand(NewTableSomeCommand);
-        //OpenEditWaiterFormCommand = new TriggerCommand(HandleOpenEditWaiterForm);
+        OpenEditWaiterFormCommand = new TriggerCommand<object>(HandleOpenEditWaiterForm);
         OpenAddWaiterFormCommand = new TriggerCommand(HandleOpenAddWaiterForm);
         OpenAddDishFormCommand = new TriggerCommand(HandleOpenAddDishForm);
         AddWaiterCommand = new TriggerCommand(HandleAddWaiter);
         AddDishCommand = new TriggerCommand(HandleAddDish);
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
+        EditWaiterCommand = new TriggerCommand(HandleEditWaiterCommand);
     }
-    
+
+
 
     private async void InitializeData()
     {
@@ -129,16 +144,42 @@ public class MainViewModel : BaseViewModel
     }
     
     //Редактирование Официанта
-    private async void HandleOpenEditWaiterForm(object waiter) // Todo Сделать метод
+    private  void HandleOpenEditWaiterForm(object waiter) // Todo Сделать метод
     {
-        var DataContext = ((Button)waiter).DataContext;
-        if (DataContext is GetWaiterResponse _waiter)
+        var Datacontext = ((Button)waiter).DataContext;
+        if(Datacontext is GetWaiterResponse _waiter) // rework
         {
-            var win = new EditWaiter();
-            win.Show();
+
+            EditWaiterRequest.Id = _waiter.Id;
+            EditWaiterRequest.FirstName = _waiter.FirstName;
+            EditWaiterRequest.LastName = _waiter.LastName;
+            EditWaiterRequest.Patronymic = _waiter.Patronymic;
+            EditWaiterRequest.Phone = _waiter.Phone;
         }
+       
+     
+        
+        var win = new EditWaiter(this);
+        win.Show();  
     }
-    
+
+    private async void HandleEditWaiterCommand()
+    {
+       
+            var response = await _httpClient.PutAsJsonAsync(_options.Host + $"/api/Admin/Waiter/{EditWaiterRequest.Id}", EditWaiterRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseObj = await ResponseHandler.DeserializeAsync<GetWaiterResponse>(response);
+                var obj = Waiters.FirstOrDefault(i => i.Id == responseObj.Id);
+                obj = responseObj;
+                RaisePropertyChanged(nameof(Waiters));
+
+            }
+        
+
+    }
+
     //Получить всех официантов
     private async Task<ObservableCollection<GetWaiterResponse>> GetAllWaiters()
     {
