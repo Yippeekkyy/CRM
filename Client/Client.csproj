@@ -32,7 +32,6 @@
 
 
     <ItemGroup>
-      <Folder Include="Model\" />
     
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-rc.2.23479.6" />
     

@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.ViewModel;
 using Client.Views.Controls;
+using Common;
+using MyCRM.Model;
 
 namespace Client
 {
@@ -24,44 +26,77 @@ namespace Client
     {
         private MainViewModel _viewModel;
       
+        private AuthorizationControl AuthorizationControl { get; set; }
         private OrderControl OrderControl { get; set; }
         private AdminControl AdminControl { get; set; }
-        private UserCabinet UserCabinet { get; set; }
+        private UserCabinetControl UserCabinet { get; set; }
+        private AccessDenied AccessDenied { get; set; }
+
+        public string currentTag { get; set; }
         public MainWindow(MainViewModel viewModel)
         {
-            _viewModel = viewModel;
             InitializeComponent();
+            _viewModel = viewModel;
             DataContext = viewModel;
-            Loaded += MainWindow_Loaded;
-
-         
+            
+            AuthorizationControl = new AuthorizationControl(_viewModel);
             OrderControl = new OrderControl();
             AdminControl = new AdminControl();
-            UserCabinet = new UserCabinet();
+            UserCabinet = new UserCabinetControl(_viewModel);
             
-            MainContentController.Content = AdminControl;
+            viewModel.UpdateMainWindow += Update;
+            Update();
         }
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-            
-        }
+       
 
-        private void MenuClick(object sender, RoutedEventArgs e)
+        public void Update()
         {
-            string currentTag = (sender as Button).Tag.ToString();
+            if (_viewModel.Token == null)
+            {
+                MainContentController.Content = new AuthorizationControl(_viewModel);
+                 return;
+            }
+            
             switch (currentTag)
             {
                 case ("Page1"):
-                    MainContentController.Content = AdminControl;
+                    if (_viewModel.SelectedUser.Role.Role == RoleType.Admin)
+                    {
+                        MainContentController.Content = AdminControl;
+                        break;
+                    }
+                    MainContentController.Content = new AccessDenied();
                     break;
+                
                 case ("Page2"):
-                    MainContentController.Content = OrderControl;
+                    if (_viewModel.SelectedUser.Role.Role == RoleType.Admin || _viewModel.SelectedUser.Role.Role == RoleType.Waiter)
+                    {
+                        MainContentController.Content = OrderControl;
+                        break;
+                    }
+                    MainContentController.Content = new AccessDenied();
                     break;
+                
                 case ("Page3"):
-                    MainContentController.Content = UserCabinet;
+                    if (_viewModel.Token == null)
+                    {
+                        MainContentController.Content = new AuthorizationControl(_viewModel);
+                    }
+                    else
+                    {
+                        MainContentController.Content = new UserCabinetControl(_viewModel);
+                    }
+                    break;
+                default:
+                    MainContentController.Content = new UserCabinetControl(_viewModel);
                     break;
             }
+            UpdateLayout();
+        }
+        private void MenuClick(object sender, RoutedEventArgs e)
+        {
+            currentTag = (sender as Button).Tag.ToString();
+            Update();
         }
     }
 }

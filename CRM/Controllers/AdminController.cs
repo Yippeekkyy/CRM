@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,18 +59,59 @@ namespace MyCRM.Controllers
         [HttpPut("Waiter/{id}")]
         public async Task<GetWaiterResponse> EditWaiter(int id, [FromBody]EditWaiterRequest waiter) // ToDo Переписать, метод должен принимать только id
         {
-            var waiterToUpdate = await _dbContext.Waiters.FindAsync(id);
-            waiterToUpdate.FirstName = waiter.FirstName;
-            waiterToUpdate.LastName = waiter.LastName;
-            waiterToUpdate.Patronimyc = waiter.Patronymic;
-            waiterToUpdate.Phone = waiter.Phone;
+
+          
+
+            return NoContent();
+        }
+
+        [HttpGet("GetUsers")]
+        public async Task GetUsers()
+        {
+            var waiter = new Waiter()
+            {
+                FirstName = "aa",
+                LastName = "bb",
+                Patronymic = "kek",
+                Phone = 11,
+                RoleId = 2,
+                Orders = new List<Order>()
+                {
+                    new Order() { Table = new Table() { Description = "kek" }, OrderTime = DateTime.Today }
+                }
+            };
             
+            var user = new User()
+            {
+                FirstName = "aa1",
+                LastName = "bb1",
+                Patronymic = "dd",
+                RoleId = 1,
+                Phone = 23
+            };
+
+            await _dbContext.Waiters.AddAsync(waiter);
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+            
+            var users = _dbContext.Users.ToList();
+            var waiters = _dbContext.Waiters.ToList();
+        }
 
-
-            var response = new GetWaiterResponse(waiterToUpdate);
-            return response;
-
+        [HttpPost("AddUser")]
+        public async Task<IActionResult> PostUser(AddWaiterRequest request)
+        {
+            var waiter = new User()
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Patronymic = request.Patronymic,
+                Phone = request.Phone,
+                RoleId = 2
+            };
+            var waiterEntity = await _dbContext.Users.AddAsync(waiter);
+            await _dbContext.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPost("Waiter")]
@@ -79,8 +121,9 @@ namespace MyCRM.Controllers
           {
               FirstName = request.FirstName,
               LastName = request.LastName,
-              Patronimyc = request.Patronymic,
-              Phone = request.Phone
+              Patronymic = request.Patronymic,
+              Phone = request.Phone,
+              RoleId = 2
           };
             var waiterEntity = await _dbContext.Waiters.AddAsync(waiter);
             await _dbContext.SaveChangesAsync();
@@ -227,10 +270,7 @@ namespace MyCRM.Controllers
             return (_dbContext.Dishes?.Any(e => e.DishId == id)).GetValueOrDefault();
         }
         
-        private bool WaiterExists(int id)
-        {
-            return (_dbContext.Waiters?.Any(e => e.WaiterId == id)).GetValueOrDefault();
-        }
+       
         
     }
 }

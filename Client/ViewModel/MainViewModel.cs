@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,8 +16,12 @@ using Client.Options;
 using Client.Views;
 using Common;
 using Common.HandleResponses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Options;
+using MyCRM.Authorize.Responses;
+using MyCRM.Model;
 using MyCRM.Requests;
 using MyCRM.Responses;
 using Newtonsoft.Json;
@@ -27,25 +32,26 @@ public class MainViewModel : BaseViewModel
 {
     private readonly BackendOptions _options;
     private readonly HttpClient _httpClient;
-
-
-
-    private ObservableCollection<GetWaiterResponse> _waiters;
-
-    public ObservableCollection<GetWaiterResponse> Waiters {
-        get => _waiters;
-        set 
-        {
-            _waiters = value;
-            RaisePropertyChanged(nameof(Waiters));
-        } }
     
+    public string Token { get; set; }
+    
+    public event Action UpdateMainWindow;
+
+    private GetWaiterResponse _selectedWaiter { get; set; }
+
+
+    public User SelectedUser { get; set; } = new();
+  
+    public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
+
     public ObservableCollection<GetDishesResponse> Dishes { get; set; } = new();
     
 
     public EditWaiterRequest EditWaiterRequest { get; set; } = new ();
     public AddWaiterRequest AddWaiterRequest { get; set; } = new();
     public AddDishRequest AddDishRequest { get; set; } = new();
+    public LoginRequest LoginRequest { get; set; } = new();
+    
     
     public TriggerCommand SomeCommand { get; set; } 
     public TriggerCommand OpenAddWaiterFormCommand { get; set; }
@@ -55,10 +61,15 @@ public class MainViewModel : BaseViewModel
     public TriggerCommand<object> OpenEditWaiterFormCommand { get; set; }
 
     public TriggerCommand<object> DeleteWaiterCommand { get; set; }
-    public TriggerCommand EditWaiterCommand { get; set; }
+
+    
+    public TriggerCommand LoginCommand { get; set; }
+    public TriggerCommand LogoutCommand { get; set; }
 
 
 
+
+    private MainWindow _mainWindow;
     
 
     public MainViewModel(IOptions<BackendOptions> options, IHttpClientFactory clientFactory)
@@ -78,7 +89,10 @@ public class MainViewModel : BaseViewModel
         AddWaiterCommand = new TriggerCommand(HandleAddWaiter);
         AddDishCommand = new TriggerCommand(HandleAddDish);
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
-        EditWaiterCommand = new TriggerCommand(HandleEditWaiterCommand);
+
+        
+        LoginCommand = new TriggerCommand(Login);
+        LogoutCommand = new TriggerCommand(Logout);
     }
 
 
@@ -143,42 +157,9 @@ public class MainViewModel : BaseViewModel
         }
     }
     
-    //Редактирование Официанта
-    private  void HandleOpenEditWaiterForm(object waiter) // Todo Сделать метод
-    {
-        var Datacontext = ((Button)waiter).DataContext;
-        if(Datacontext is GetWaiterResponse _waiter) // rework
-        {
 
-            EditWaiterRequest.Id = _waiter.Id;
-            EditWaiterRequest.FirstName = _waiter.FirstName;
-            EditWaiterRequest.LastName = _waiter.LastName;
-            EditWaiterRequest.Patronymic = _waiter.Patronymic;
-            EditWaiterRequest.Phone = _waiter.Phone;
-        }
-       
-     
-        
-        var win = new EditWaiter(this);
-        win.Show();  
-    }
 
-    private async void HandleEditWaiterCommand()
-    {
-       
-            var response = await _httpClient.PutAsJsonAsync(_options.Host + $"/api/Admin/Waiter/{EditWaiterRequest.Id}", EditWaiterRequest);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var responseObj = await ResponseHandler.DeserializeAsync<GetWaiterResponse>(response);
-                var obj = Waiters.FirstOrDefault(i => i.Id == responseObj.Id);
-                obj = responseObj;
-                RaisePropertyChanged(nameof(Waiters));
-
-            }
-        
-
-    }
 
     //Получить всех официантов
     private async Task<ObservableCollection<GetWaiterResponse>> GetAllWaiters()
@@ -208,6 +189,31 @@ public class MainViewModel : BaseViewModel
         var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishesResponse>>(response);
 
         return responseObj;
+    }
+
+    private async void Login()
+    {
+        var response = await _httpClient.GetAsync(_options.Host + $"/api/Authorization/Login?UserId={LoginRequest.UserId}&password={LoginRequest.Password}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseObj = await ResponseHandler.DeserializeAsync<LoginResponse>(response);
+            Token = responseObj.Token;
+            
+            SelectedUser = responseObj.User;
+            LoginRequest = new LoginRequest();
+            RaisePropertyChanged(nameof(SelectedUser));
+            UpdateMainWindow.Invoke();
+        }
+        
+    }
+    
+    private void Logout()
+    {
+        SelectedUser = new User();
+        Token = null;
+        RaisePropertyChanged(nameof(SelectedUser));
+        UpdateMainWindow.Invoke();
     }
 
 }

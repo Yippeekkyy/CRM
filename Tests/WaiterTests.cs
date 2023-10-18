@@ -37,7 +37,7 @@ public class WaiterTests
         
         waiter.FirstName.ShouldBe(request.FirstName);
         waiter.LastName.ShouldBe(request.LastName);
-        waiter.Patronimyc.ShouldBe(request.Patronymic);
+        waiter.Patronymic.ShouldBe(request.Patronymic);
         waiter.Phone.ShouldBe(request.Phone);
     }
 }

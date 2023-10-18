@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using MyCRM.Authorize;
 using MyCRM.Database;
 using MyCRM.Repositories;
 
@@ -18,12 +23,32 @@ namespace MyCRM
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
        //     services.AddMediatR(typeof(Startup));
             services.AddSwaggerGen();
+            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
+
+            var secretKey = Configuration.GetSection("JwtOptions:SecretKey").Value;
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = signingKey,
+                    ValidateIssuerSigningKey = true
+                };
+            });
 
             AddDbContext(services);
             services.AddTransient<WaiterRepository>();
@@ -61,7 +86,7 @@ namespace MyCRM
 
         private void AddDbContext(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("local");
+            var connectionString = Configuration.GetConnectionString("local2");
   
 
             services.AddDbContext<MainDbContext>(options =>
