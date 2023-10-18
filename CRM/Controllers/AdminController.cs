@@ -6,6 +6,7 @@ using Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using MyCRM.Database;
 using MyCRM.Model;
 using MyCRM.Requests;
@@ -56,8 +57,9 @@ namespace MyCRM.Controllers
         }
         
         [HttpPut("Waiter/{id}")]
-        public async Task<IActionResult> PutWaiter(int id, Waiter waiter) // ToDo Переписать, метод должен принимать только id
+        public async Task<GetWaiterResponse> EditWaiter(int id, [FromBody]EditWaiterRequest waiter) // ToDo Переписать, метод должен принимать только id
         {
+
           
 
             return NoContent();
@@ -111,7 +113,7 @@ namespace MyCRM.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok();
         }
-        
+
         [HttpPost("Waiter")]
         public async Task<IActionResult> PostWaiter(AddWaiterRequest request)
         {

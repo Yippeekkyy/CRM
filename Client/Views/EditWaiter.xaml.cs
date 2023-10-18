@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,17 @@ namespace Client.Views
     /// </summary>
     public partial class EditWaiter : Window
     {
-        public EditWaiter()
+        private MainViewModel _viewModel;
+
+
+
+        public EditWaiter(MainViewModel viewModel)
         {
+            _viewModel = viewModel;
             InitializeComponent();
+            DataContext = viewModel;
         }
+
+
     }
 }

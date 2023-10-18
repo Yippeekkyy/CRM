@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -40,13 +39,16 @@ public class MainViewModel : BaseViewModel
 
     private GetWaiterResponse _selectedWaiter { get; set; }
 
+
     public User SelectedUser { get; set; } = new();
   
     public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
+
     public ObservableCollection<GetDishesResponse> Dishes { get; set; } = new();
     
 
-    public AddWaiterRequest AddWaiterRequest { get; set; } = new ();
+    public EditWaiterRequest EditWaiterRequest { get; set; } = new ();
+    public AddWaiterRequest AddWaiterRequest { get; set; } = new();
     public AddDishRequest AddDishRequest { get; set; } = new();
     public LoginRequest LoginRequest { get; set; } = new();
     
@@ -56,12 +58,15 @@ public class MainViewModel : BaseViewModel
     public TriggerCommand OpenAddDishFormCommand { get; set; }
     public TriggerCommand AddWaiterCommand { get; set; }
     public TriggerCommand AddDishCommand { get; set; }
-    public TriggerCommand OpenEditWaiterFormCommand { get; set; }
+    public TriggerCommand<object> OpenEditWaiterFormCommand { get; set; }
 
     public TriggerCommand<object> DeleteWaiterCommand { get; set; }
+
     
     public TriggerCommand LoginCommand { get; set; }
     public TriggerCommand LogoutCommand { get; set; }
+
+
 
 
     private MainWindow _mainWindow;
@@ -78,17 +83,19 @@ public class MainViewModel : BaseViewModel
     private void InitializeCommands()
     {
         SomeCommand = new TriggerCommand(NewTableSomeCommand);
-        //OpenEditWaiterFormCommand = new TriggerCommand(HandleOpenEditWaiterForm);
+        OpenEditWaiterFormCommand = new TriggerCommand<object>(HandleOpenEditWaiterForm);
         OpenAddWaiterFormCommand = new TriggerCommand(HandleOpenAddWaiterForm);
         OpenAddDishFormCommand = new TriggerCommand(HandleOpenAddDishForm);
         AddWaiterCommand = new TriggerCommand(HandleAddWaiter);
         AddDishCommand = new TriggerCommand(HandleAddDish);
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
+
         
         LoginCommand = new TriggerCommand(Login);
         LogoutCommand = new TriggerCommand(Logout);
     }
-    
+
+
 
     private async void InitializeData()
     {
@@ -150,17 +157,10 @@ public class MainViewModel : BaseViewModel
         }
     }
     
-    //Редактирование Официанта
-    private async void HandleOpenEditWaiterForm(object waiter) // Todo Сделать метод
-    {
-        var DataContext = ((Button)waiter).DataContext;
-        if (DataContext is GetWaiterResponse _waiter)
-        {
-            var win = new EditWaiter();
-            win.Show();
-        }
-    }
-    
+
+
+
+
     //Получить всех официантов
     private async Task<ObservableCollection<GetWaiterResponse>> GetAllWaiters()
     {

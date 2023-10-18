@@ -18,10 +18,10 @@
                     
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Имя" Width="46" DisplayMemberBinding="{Binding FirstName}" />
-                            <GridViewColumn Header="Фамилия" Width="60" DisplayMemberBinding="{Binding LastName}" />
-                            <GridViewColumn Header="Отчество" Width="70" DisplayMemberBinding="{Binding Patronymic}" />
-                            <GridViewColumn Header="Телефон" Width="70" DisplayMemberBinding="{Binding Phone}" />
+                                <GridViewColumn Header="Имя" Width="46" DisplayMemberBinding="{Binding Path=FirstName, Mode=TwoWay}" />
+                                <GridViewColumn Header="Фамилия" Width="60" DisplayMemberBinding="{Binding Path=LastName, Mode=TwoWay}" />
+                                <GridViewColumn Header="Отчество" Width="70" DisplayMemberBinding="{Binding Path=Patronymic, Mode=TwoWay}" />
+                                <GridViewColumn Header="Телефон" Width="70" DisplayMemberBinding="{Binding Path=Phone, Mode=TwoWay}" />
                             
                             <GridViewColumn >
                                 <GridViewColumn.CellTemplate >
