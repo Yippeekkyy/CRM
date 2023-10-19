@@ -66,8 +66,6 @@ namespace MyCRM.Controllers
             waiterToUpdate.Phone = waiter.Phone;
 
             await _dbContext.SaveChangesAsync();
-
-            _dbContext.Entry(waiter).State = EntityState.Modified;
           
 
             var response = new GetWaiterResponse(waiterToUpdate);

@@ -66,7 +66,7 @@ public class MainViewModel : BaseViewModel
     
     public TriggerCommand LoginCommand { get; set; }
     public TriggerCommand LogoutCommand { get; set; }
-
+    public TriggerCommand EditWaiterCommand { get; set; }
 
 
 
@@ -91,7 +91,7 @@ public class MainViewModel : BaseViewModel
         AddDishCommand = new TriggerCommand(HandleAddDish);
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
 
-        
+        EditWaiterCommand = new TriggerCommand(HandleEditWaiterCommand);
         LoginCommand = new TriggerCommand(Login);
         LogoutCommand = new TriggerCommand(Logout);
     }
@@ -103,6 +103,13 @@ public class MainViewModel : BaseViewModel
         {
 #if DEBUG
             LoginRequest = new LoginRequest() { UserId = "1", Password = "1111" };
+            SelectedUser = new User() {
+                    FirstName = "Guest",
+                    LastName = "Guest",
+                    Role = new UserRole(){Id = 1, Role = RoleType.Admin}};
+                    
+            Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwibmJmIjoxNjk3Njc2NzU4LCJleHAiOjIwMTMyOTU5NTh9.fXzK7w4KdS1poYiAPer_4Jmmx41i6CZF8fr2yN0PuHY";
+         
 #endif
             
             Waiters = await GetAllWaiters();
@@ -229,7 +236,23 @@ public class MainViewModel : BaseViewModel
         var win = new EditWaiter(this);
         win.Show();  
     }
-    
+    private async void HandleEditWaiterCommand()
+    {
+        var response = await _httpClient.PutAsJsonAsync(_options.Host + $"/api/Admin/Waiter/{EditWaiterRequest.Id}", EditWaiterRequest);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseObj = await ResponseHandler.DeserializeAsync<GetWaiterResponse>(response);
+            
+            var objToEdit = Waiters.FirstOrDefault(i => i.Id == responseObj.Id);
+            
+            if (objToEdit != null)
+            {
+                int i = Waiters.IndexOf(objToEdit);
+                Waiters[i] = responseObj;
+            }
+        }
+    }
     
     private void Logout()
     {
