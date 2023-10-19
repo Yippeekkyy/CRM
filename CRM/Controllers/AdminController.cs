@@ -59,43 +59,19 @@ namespace MyCRM.Controllers
         [HttpPut("Waiter/{id}")]
         public async Task<GetWaiterResponse> EditWaiter(int id, [FromBody]EditWaiterRequest waiter) // ToDo Переписать, метод должен принимать только id
         {
+            var waiterToUpdate = await _dbContext.Waiters.FindAsync(id);
+            waiterToUpdate.FirstName = waiter.FirstName;
+            waiterToUpdate.LastName = waiter.LastName;
+            waiterToUpdate.Patronymic = waiter.Patronymic;
+            waiterToUpdate.Phone = waiter.Phone;
 
+            await _dbContext.SaveChangesAsync();
+
+            _dbContext.Entry(waiter).State = EntityState.Modified;
           
 
-            return NoContent();
-        }
-
-        [HttpGet("GetUsers")]
-        public async Task GetUsers()
-        {
-            var waiter = new Waiter()
-            {
-                FirstName = "aa",
-                LastName = "bb",
-                Patronymic = "kek",
-                Phone = 11,
-                RoleId = 2,
-                Orders = new List<Order>()
-                {
-                    new Order() { Table = new Table() { Description = "kek" }, OrderTime = DateTime.Today }
-                }
-            };
-            
-            var user = new User()
-            {
-                FirstName = "aa1",
-                LastName = "bb1",
-                Patronymic = "dd",
-                RoleId = 1,
-                Phone = 23
-            };
-
-            await _dbContext.Waiters.AddAsync(waiter);
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
-            
-            var users = _dbContext.Users.ToList();
-            var waiters = _dbContext.Waiters.ToList();
+            var response = new GetWaiterResponse(waiterToUpdate);
+            return response;
         }
 
         [HttpPost("AddUser")]

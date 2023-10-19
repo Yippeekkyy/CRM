@@ -32,16 +32,17 @@ public class MainViewModel : BaseViewModel
 {
     private readonly BackendOptions _options;
     private readonly HttpClient _httpClient;
-    
-    public string Token { get; set; }
+
+
+    public string Token { get; set; } 
     
     public event Action UpdateMainWindow;
 
     private GetWaiterResponse _selectedWaiter { get; set; }
 
-
+   
     public User SelectedUser { get; set; } = new();
-  
+
     public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
 
     public ObservableCollection<GetDishesResponse> Dishes { get; set; } = new();
@@ -96,11 +97,14 @@ public class MainViewModel : BaseViewModel
     }
 
 
-
     private async void InitializeData()
     {
         try
         {
+#if DEBUG
+            LoginRequest = new LoginRequest() { UserId = "1", Password = "1111" };
+#endif
+            
             Waiters = await GetAllWaiters();
             Dishes = await GetAllDishes();
             RaisePropertyChanged(nameof(Waiters));
@@ -207,6 +211,25 @@ public class MainViewModel : BaseViewModel
         }
         
     }
+    //Редактирование Официанта
+    private  void HandleOpenEditWaiterForm(object waiter) // Todo Сделать метод
+    {
+        var Datacontext = ((Button)waiter).DataContext;
+        if(Datacontext is GetWaiterResponse _waiter) // rework
+        {
+
+            EditWaiterRequest.Id = _waiter.Id;
+            EditWaiterRequest.FirstName = _waiter.FirstName;
+            EditWaiterRequest.LastName = _waiter.LastName;
+            EditWaiterRequest.Patronymic = _waiter.Patronymic;
+            EditWaiterRequest.Phone = _waiter.Phone;
+        }
+
+       
+        var win = new EditWaiter(this);
+        win.Show();  
+    }
+    
     
     private void Logout()
     {
@@ -215,5 +238,4 @@ public class MainViewModel : BaseViewModel
         RaisePropertyChanged(nameof(SelectedUser));
         UpdateMainWindow.Invoke();
     }
-
 }

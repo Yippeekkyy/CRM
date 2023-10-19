@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.ViewModel;
+using Client.Views;
 using Client.Views.Controls;
 using Common;
 using MyCRM.Model;
@@ -32,16 +33,19 @@ namespace Client
         private UserCabinetControl UserCabinet { get; set; }
         private AccessDenied AccessDenied { get; set; }
 
+    
         public string currentTag { get; set; }
+        
         public MainWindow(MainViewModel viewModel)
         {
+       
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = viewModel;
             
             AuthorizationControl = new AuthorizationControl(_viewModel);
             OrderControl = new OrderControl();
-            AdminControl = new AdminControl();
+            AdminControl = new AdminControl(_viewModel);
             UserCabinet = new UserCabinetControl(_viewModel);
             
             viewModel.UpdateMainWindow += Update;
@@ -98,5 +102,6 @@ namespace Client
             currentTag = (sender as Button).Tag.ToString();
             Update();
         }
+        
     }
 }
