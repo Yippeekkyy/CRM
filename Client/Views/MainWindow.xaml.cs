@@ -26,6 +26,7 @@ namespace Client
     public partial class MainWindow : Window
     {
         private MainViewModel _viewModel;
+        private AuthorizeViewModel _authorizeViewModel;
       
         private AuthorizationControl AuthorizationControl { get; set; }
         private OrderControl OrderControl { get; set; }
@@ -36,35 +37,35 @@ namespace Client
     
         public string currentTag { get; set; }
         
-        public MainWindow(MainViewModel viewModel)
+        public MainWindow(MainViewModel viewModel,AuthorizeViewModel authorizeViewModel)
         {
-       
+            _authorizeViewModel = authorizeViewModel;
             InitializeComponent();
             _viewModel = viewModel;
-            DataContext = viewModel;
+            DataContext = new DataContexts(viewModel,authorizeViewModel);
             
-            AuthorizationControl = new AuthorizationControl(_viewModel);
+            AuthorizationControl = new AuthorizationControl(_authorizeViewModel);
             OrderControl = new OrderControl();
             AdminControl = new AdminControl(_viewModel);
-            UserCabinet = new UserCabinetControl(_viewModel);
+            UserCabinet = new UserCabinetControl(_authorizeViewModel);
             
-            viewModel.UpdateMainWindow += Update;
+            authorizeViewModel.UpdateMainWindow += Update;
             Update();
         }
        
 
         public void Update()
         {
-            if (_viewModel.Token == null)
+            if (_authorizeViewModel.Token == null)
             {
-                MainContentController.Content = new AuthorizationControl(_viewModel);
+                MainContentController.Content = new AuthorizationControl(_authorizeViewModel);
                  return;
             }
             
             switch (currentTag)
             {
                 case ("Page1"):
-                    if (_viewModel.SelectedUser.Role.Role == RoleType.Admin)
+                    if (_authorizeViewModel.SelectedUser.Role.Role == RoleType.Admin)
                     {
                         MainContentController.Content = AdminControl;
                         break;
@@ -73,7 +74,7 @@ namespace Client
                     break;
                 
                 case ("Page2"):
-                    if (_viewModel.SelectedUser.Role.Role == RoleType.Admin || _viewModel.SelectedUser.Role.Role == RoleType.Waiter)
+                    if (_authorizeViewModel.SelectedUser.Role.Role == RoleType.Admin || _authorizeViewModel.SelectedUser.Role.Role == RoleType.Waiter)
                     {
                         MainContentController.Content = OrderControl;
                         break;
@@ -82,17 +83,10 @@ namespace Client
                     break;
                 
                 case ("Page3"):
-                    if (_viewModel.Token == null)
-                    {
-                        MainContentController.Content = new AuthorizationControl(_viewModel);
-                    }
-                    else
-                    {
-                        MainContentController.Content = new UserCabinetControl(_viewModel);
-                    }
+                        MainContentController.Content = new UserCabinetControl(_authorizeViewModel);
                     break;
                 default:
-                    MainContentController.Content = new UserCabinetControl(_viewModel);
+                    MainContentController.Content = new UserCabinetControl(_authorizeViewModel);
                     break;
             }
             UpdateLayout();

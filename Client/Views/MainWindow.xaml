@@ -59,8 +59,8 @@
             <TextBlock Foreground="AntiqueWhite">
                 <TextBlock.Text >
                     <MultiBinding StringFormat="User: {0}     Role: {1}" >
-                        <Binding Path="SelectedUser.Id"  />
-                        <Binding Path="SelectedUser.Role.Role" />
+                        <Binding Path="AuthorizeViewModel.SelectedUser.Id"  />
+                        <Binding Path="AuthorizeViewModel.SelectedUser.Role.Role" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

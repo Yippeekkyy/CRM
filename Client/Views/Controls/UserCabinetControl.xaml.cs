@@ -5,7 +5,7 @@ namespace Client.Views.Controls;
 
 public partial class UserCabinetControl : UserControl
 {
-    public UserCabinetControl(MainViewModel viewModel)
+    public UserCabinetControl(AuthorizeViewModel viewModel)
     {
         InitializeComponent();
         DataContext = viewModel;

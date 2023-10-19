@@ -33,15 +33,10 @@ public class MainViewModel : BaseViewModel
     private readonly BackendOptions _options;
     private readonly HttpClient _httpClient;
 
-
-    public string Token { get; set; } 
-    
-    public event Action UpdateMainWindow;
-
     private GetWaiterResponse _selectedWaiter { get; set; }
 
    
-    public User SelectedUser { get; set; } = new();
+    
 
     public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
 
@@ -51,7 +46,7 @@ public class MainViewModel : BaseViewModel
     public EditWaiterRequest EditWaiterRequest { get; set; } = new ();
     public AddWaiterRequest AddWaiterRequest { get; set; } = new();
     public AddDishRequest AddDishRequest { get; set; } = new();
-    public LoginRequest LoginRequest { get; set; } = new();
+    
     
     
     public TriggerCommand SomeCommand { get; set; } 
@@ -67,13 +62,12 @@ public class MainViewModel : BaseViewModel
     public TriggerCommand LoginCommand { get; set; }
     public TriggerCommand LogoutCommand { get; set; }
     public TriggerCommand EditWaiterCommand { get; set; }
-
-
+    
 
     private MainWindow _mainWindow;
     
 
-    public MainViewModel(IOptions<BackendOptions> options, IHttpClientFactory clientFactory)
+    public MainViewModel(IOptions<BackendOptions> options,IHttpClientFactory clientFactory) 
     {
         _options = options.Value;
         _httpClient = clientFactory.CreateClient("HttpClient");
@@ -92,8 +86,6 @@ public class MainViewModel : BaseViewModel
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
 
         EditWaiterCommand = new TriggerCommand(HandleEditWaiterCommand);
-        LoginCommand = new TriggerCommand(Login);
-        LogoutCommand = new TriggerCommand(Logout);
     }
 
 
@@ -101,16 +93,7 @@ public class MainViewModel : BaseViewModel
     {
         try
         {
-#if DEBUG
-            LoginRequest = new LoginRequest() { UserId = "1", Password = "1111" };
-            SelectedUser = new User() {
-                    FirstName = "Guest",
-                    LastName = "Guest",
-                    Role = new UserRole(){Id = 1, Role = RoleType.Admin}};
-                    
-            Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwibmJmIjoxNjk3Njc2NzU4LCJleHAiOjIwMTMyOTU5NTh9.fXzK7w4KdS1poYiAPer_4Jmmx41i6CZF8fr2yN0PuHY";
-         
-#endif
+
             
             Waiters = await GetAllWaiters();
             Dishes = await GetAllDishes();
@@ -200,24 +183,9 @@ public class MainViewModel : BaseViewModel
         var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishesResponse>>(response);
 
         return responseObj;
-    }
-
-    private async void Login()
-    {
-        var response = await _httpClient.GetAsync(_options.Host + $"/api/Authorization/Login?UserId={LoginRequest.UserId}&password={LoginRequest.Password}");
-
-        if (response.IsSuccessStatusCode)
-        {
-            var responseObj = await ResponseHandler.DeserializeAsync<LoginResponse>(response);
-            Token = responseObj.Token;
-            
-            SelectedUser = responseObj.User;
-            LoginRequest = new LoginRequest();
-            RaisePropertyChanged(nameof(SelectedUser));
-            UpdateMainWindow.Invoke();
-        }
         
     }
+    
     //Редактирование Официанта
     private  void HandleOpenEditWaiterForm(object waiter) // Todo Сделать метод
     {
@@ -252,13 +220,5 @@ public class MainViewModel : BaseViewModel
                 Waiters[i] = responseObj;
             }
         }
-    }
-    
-    private void Logout()
-    {
-        SelectedUser = new User();
-        Token = null;
-        RaisePropertyChanged(nameof(SelectedUser));
-        UpdateMainWindow.Invoke();
     }
 }

@@ -25,7 +25,7 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<MainViewModel>();
-
+                services.AddSingleton<AuthorizeViewModel>();
                 services.AddSingleton<MainWindow>();
                 
                 services.Configure<BackendOptions>(Configuration.GetSection("Backend"));
