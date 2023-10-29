@@ -2,18 +2,18 @@
 
 namespace MyCRM.Responses
 {
-    public class GetDishesResponse
+    public class GetDishResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
 
-        public GetDishesResponse()
+        public GetDishResponse()
         {
 
         }
 
-        public GetDishesResponse(Dish dish)
+        public GetDishResponse(Dish dish)
         {
             Id = dish.DishId;
             Name = dish.Name;

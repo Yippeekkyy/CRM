@@ -125,126 +125,99 @@ namespace MyCRM.Controllers
 
             return NoContent();
         }
-        
-        
-        
-        //Dishes
-        
-        [HttpGet("Dishes")]
-        public async Task<ActionResult<IEnumerable<GetDishesResponse>>> GetDishes()
+
+        //TableController
+
+        [HttpGet("Tables")]
+        public async Task<ActionResult<IEnumerable<GetTableResponse>>> GetTables()
         {
-            if (_dbContext.Dishes == null)
+            if (_dbContext.Tables == null)
             {
                 return NotFound();
             }
 
-            var dishes = await _dbContext.Dishes.ToListAsync();
+            var tables = await _dbContext.Tables.ToListAsync();
 
-            var response = new List<GetDishesResponse>();
+            var response = new List<GetTableResponse>();
 
-            dishes.ForEach(i => response.Add(new GetDishesResponse(i)));
+            tables.ForEach(i => response.Add(new GetTableResponse(i)));
 
             return response;
         }
 
 
-        [HttpGet("Dish/{id}")]
-        public async Task<ActionResult<Dish>> GetDish(int id)
+        [HttpGet("Table/{id}")]
+        public async Task<ActionResult<Table>> GetTable(int id)
         {
-            if (_dbContext.Dishes == null)
+            if (_dbContext.Tables == null)
             {
                 return NotFound();
             }
-            var dish = await _dbContext.Dishes.FindAsync(id);
+            var table = await _dbContext.Tables.FindAsync(id);
 
-            if (dish == null)
+            if (table == null)
             {
                 return NotFound();
             }
 
-            return dish;
-        }
-
-        
-        [HttpPut("Dish/{id}")]
-        public async Task<IActionResult> PutDish(int id, Dish dish)
-        {
-            if (id != dish.DishId)
-            {
-                return BadRequest();
-            }
-
-            _dbContext.Entry(dish).State = EntityState.Modified;
-
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DishExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return table;
         }
 
 
-        [HttpPost("Dish")]
-        public async Task<ActionResult<Dish>> PostDish(AddDishRequest request)
+        [HttpPut("Table/{id}")]
+        public async Task<GetTableResponse> EditTable(int id, [FromBody] EditTableRequest table)
         {
-            if (_dbContext.Dishes == null)
+            var tableToUpdate = await _dbContext.Tables.FindAsync(id);
+            tableToUpdate.Description = table.Description;
+            
+
+
+            await _dbContext.SaveChangesAsync();
+
+
+            var response = new GetTableResponse(tableToUpdate);
+            return response;
+        }
+
+
+        [HttpPost("Table")]
+        public async Task<ActionResult<Table>> PostTable(AddTableRequest request)
+        {
+            if (_dbContext.Tables == null)
             {
-                return Problem("Entity set 'MainDbContext.Dishes'  is null.");
+                return Problem("Entity set 'MainDbContext.Tables'  is null.");
             }
 
-            var dish = new Dish()
+            var table = new Table()
             {
-                Name = request.Name,
-                Price = request.Price
+                Description = request.Description,
+                
             };
 
-            await _dbContext.Dishes.AddAsync(dish);
+            await _dbContext.Tables.AddAsync(table);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction("GetDish", new { id = dish.DishId }, dish);
+            return CreatedAtAction("GetTable", new { id = table.Id }, table);
         }
-        
-        
-        [HttpDelete("Dish/{id}")]
-        public async Task<IActionResult> DeleteDish(int id)
+
+
+        [HttpDelete("Table/{id}")]
+        public async Task<IActionResult> DeleteTable(int id)
         {
-            if (_dbContext.Dishes == null)
+            if (_dbContext.Tables == null)
             {
                 return NotFound();
             }
-            var dish = await _dbContext.Dishes.FindAsync(id);
-            if (dish == null)
+            var table = await _dbContext.Tables.FindAsync(id);
+            if (table == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Dishes.Remove(dish);
+            _dbContext.Tables.Remove(table);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
-
-        
-        
-        
-        private bool DishExists(int id)
-        {
-            return (_dbContext.Dishes?.Any(e => e.DishId == id)).GetValueOrDefault();
-        }
-        
-       
-        
     }
 }

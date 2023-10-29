@@ -1,6 +1,6 @@
 ﻿namespace MyCRM.Requests
 {
-    public class AddDishRequest
+    public class EditDishRequest
     {
         public int DishId { get; set; }
         public string Name { get; set; }
