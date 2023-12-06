@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyCRM.Database;
 using MyCRM.Model;
+using MyCRM.Requests;
+using MyCRM.Responses;
 
 namespace MyCRM.Controllers
 {
@@ -14,111 +16,96 @@ namespace MyCRM.Controllers
     [ApiController]
     public class WaiterController : ControllerBase
     {
-        private readonly MainDbContext _context;
+        private readonly MainDbContext _dbContext;
 
-        public WaiterController(MainDbContext context)
+        public WaiterController(MainDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         // GET: api/Waiter
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
+        [HttpGet("Orders")]
+        public async Task<ActionResult<IEnumerable<GetOrderResponse>>> GetOrders()
         {
-          if (_context.Orders == null)
-          {
-              return NotFound();
-          }
-            return await _context.Orders.ToListAsync();
-        }
-
-        // GET: api/Waiter/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
-        {
-          if (_context.Orders == null)
-          {
-              return NotFound();
-          }
-            var order = await _context.Orders.FindAsync(id);
-
-            if (order == null)
+            if (_dbContext.Orders == null)
             {
                 return NotFound();
             }
+            var orders = await _dbContext.Orders.ToListAsync();
 
+            var response = new List<GetOrderResponse>();
+
+            orders.ForEach(i => response.Add(new GetOrderResponse(i)));
+
+            return response;
+        }
+
+        // GET: api/Waiter/5
+        [HttpGet("Order/{id}")]
+        public async Task<ActionResult<Order>> GetOrder(int id)
+        {
+            var order = await _dbContext.Orders.FindAsync(id);
+            if (order == null) 
+            {
+                return NotFound();
+            }
             return order;
         }
 
-        // PUT: api/Waiter/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Order order)
+        
+        [HttpPut("Order/{id}")]
+        public async Task<GetOrderResponse> EditOrder(int id, [FromBody] EditOrderRequest order)
         {
-            if (id != order.OrderId)
-            {
-                return BadRequest();
-            }
+            var orderToUpdate = await _dbContext.Orders.FindAsync(id);
+            orderToUpdate.WaiterId = order.WaiterId;
+            orderToUpdate.TableId = order.TableId;
+            
 
-            _context.Entry(order).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var response = new GetOrderResponse(orderToUpdate);
+            return response;
         }
 
         // POST: api/Waiter
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("CreateOrder")]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<IActionResult> PostOrder(AddOrderRequest request)
         {
-          if (_context.Orders == null)
-          {
-              return Problem("Entity set 'MainDbContext.Order'  is null.");
-          }
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            var order = new Order()
+            {
+                WaiterId = request.WaiterId,
+                TableId = request.TableId,
+                OrderTime = DateTime.Now
+            };
+            var orderEntity = await _dbContext.Orders.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
+            var response = new GetOrderResponse(orderEntity.Entity);
+
+            return Ok(response);
         }
 
         // DELETE: api/Waiter/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Order/{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
-            if (_context.Orders == null)
+            if (_dbContext.Orders == null)
             {
                 return NotFound();
             }
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _dbContext.Orders.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
+            _dbContext.Orders.Remove(order);
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool OrderExists(int id)
-        {
-            return (_context.Orders?.Any(e => e.OrderId == id)).GetValueOrDefault();
-        }
+        
     }
 }

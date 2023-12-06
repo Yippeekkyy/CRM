@@ -40,7 +40,7 @@ public class MainViewModel : BaseViewModel
 
     public ObservableCollection<GetWaiterResponse> Waiters { get; set; } = new();
 
-    public ObservableCollection<GetDishesResponse> Dishes { get; set; } = new();
+    public ObservableCollection<GetDishResponse> Dishes { get; set; } = new();
     
 
     public EditWaiterRequest EditWaiterRequest { get; set; } = new ();
@@ -176,11 +176,11 @@ public class MainViewModel : BaseViewModel
     }
     
     //Получить все блюда
-    private async Task<ObservableCollection<GetDishesResponse>> GetAllDishes()
+    private async Task<ObservableCollection<GetDishResponse>> GetAllDishes()
     {
         var response = await _httpClient.GetAsync(_options.Host + "/api/Admin/Dishes");
 
-        var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishesResponse>>(response);
+        var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishResponse>>(response);
 
         return responseObj;
         

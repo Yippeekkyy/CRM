@@ -10,11 +10,12 @@ public class GetWaiterResponse
     public string Patronymic { get; set; }
     public int? Phone { get; set; }
 
-
     public GetWaiterResponse()
     {
-        
+
     }
+
+
 
     public GetWaiterResponse(Waiter waiter)
     {
