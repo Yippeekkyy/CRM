@@ -12,6 +12,8 @@
             <RowDefinition Height="33*" />
             <RowDefinition Height="20*" />
             <RowDefinition Height="46*"/>
+            
+            
         </Grid.RowDefinitions>
         <Grid Margin="10,10,10,10" Grid.Row="0" Grid.Column="0" >
             <StackPanel Margin="0,5,0,5" HorizontalAlignment="Left" Width="258">

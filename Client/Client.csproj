@@ -51,6 +51,11 @@
         <Compile Update="App.cs">
             <DependentUpon>App.xaml</DependentUpon>
         </Compile>
+
+    <ItemGroup>
+      <Folder Include="HandleMethods\" />
+    </ItemGroup>
+
     </ItemGroup>
 
 

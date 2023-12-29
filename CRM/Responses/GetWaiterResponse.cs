@@ -15,8 +15,6 @@ public class GetWaiterResponse
 
     }
 
-
-
     public GetWaiterResponse(Waiter waiter)
     {
         Id = waiter.Id;
@@ -25,4 +23,8 @@ public class GetWaiterResponse
         Patronymic = waiter.Patronymic;
         Phone = waiter.Phone;
     }
+    
+
+
+
 }

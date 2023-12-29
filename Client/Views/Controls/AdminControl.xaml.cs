@@ -19,4 +19,10 @@ public partial class AdminControl : UserControl
         var win = new AddWaiter(_viewModel);
         win.Show();
     }
+
+    private void OpenAddDish(object sender, RoutedEventArgs e)
+    {
+        var win = new AddDish(_viewModel);
+        win.Show();
+    }
 }
