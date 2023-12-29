@@ -152,12 +152,9 @@ namespace MyCRM.Controllers
 
 
         [HttpPost("Dish")]
-        public async Task<ActionResult<Dish>> PostDish(AddDishRequest request)
+        public async Task<ActionResult> PostDish(AddDishRequest request)
         {
-            if (_dbContext.Dishes == null)
-            {
-                return Problem("Entity set 'MainDbContext.Dishes'  is null.");
-            }
+
 
             var dish = new Dish()
             {
@@ -165,10 +162,12 @@ namespace MyCRM.Controllers
                 Price = request.Price
             };
 
-            await _dbContext.Dishes.AddAsync(dish);
+            var dishEntity = await _dbContext.Dishes.AddAsync(dish);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction("GetDish", new { id = dish.DishId }, dish);
+            var response = new GetDishResponse(dishEntity.Entity);
+
+            return Ok(response);
         }
 
 

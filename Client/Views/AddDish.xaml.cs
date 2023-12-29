@@ -20,10 +20,10 @@ namespace Client.Views
     /// </summary>
     public partial class AddDish : Window
     {
-        public AddDish()
+        public AddDish(MainViewModel viewModel)
         {
             InitializeComponent();
-          //  DataContext = MainViewModel.GetInstance();
+            DataContext = viewModel;
 
         }
     }

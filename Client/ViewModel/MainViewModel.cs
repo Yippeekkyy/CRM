@@ -25,6 +25,7 @@ using MyCRM.Model;
 using MyCRM.Requests;
 using MyCRM.Responses;
 using Newtonsoft.Json;
+using MyCRM.Model;
 
 namespace Client.ViewModel;
 
@@ -34,6 +35,7 @@ public class MainViewModel : BaseViewModel
     private readonly HttpClient _httpClient;
 
     private GetWaiterResponse _selectedWaiter { get; set; }
+    private GetDishResponse _selectedDish { get; set; }
 
    
     
@@ -78,13 +80,16 @@ public class MainViewModel : BaseViewModel
     private void InitializeCommands()
     {
         SomeCommand = new TriggerCommand(NewTableSomeCommand);
+        
         OpenEditWaiterFormCommand = new TriggerCommand<object>(HandleOpenEditWaiterForm);
         OpenAddWaiterFormCommand = new TriggerCommand(HandleOpenAddWaiterForm);
         OpenAddDishFormCommand = new TriggerCommand(HandleOpenAddDishForm);
+        
         AddWaiterCommand = new TriggerCommand(HandleAddWaiter);
         AddDishCommand = new TriggerCommand(HandleAddDish);
+        
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
-
+        
         EditWaiterCommand = new TriggerCommand(HandleEditWaiterCommand);
     }
 
@@ -118,7 +123,7 @@ public class MainViewModel : BaseViewModel
     }
     private void HandleOpenAddDishForm()
     {
-        var win = new AddDish();
+        var win = new AddDish(this);
         win.Show();
     }
 
@@ -151,10 +156,7 @@ public class MainViewModel : BaseViewModel
         }
     }
     
-
-
-
-
+    
     //Получить всех официантов
     private async Task<ObservableCollection<GetWaiterResponse>> GetAllWaiters()
     {
@@ -171,14 +173,20 @@ public class MainViewModel : BaseViewModel
     //Добавить блюдо
     private async void HandleAddDish() // Todo переписать по образцу с официантами
     {
-        await _httpClient.PostAsJsonAsync(_options.Host + "/api/Admin/Dish", AddDishRequest); 
-        Dishes = await GetAllDishes();
+        var response = await _httpClient.PostAsJsonAsync(_options.Host + "/api/Kitchen/Dish", AddDishRequest);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseObj = await ResponseHandler.DeserializeAsync<GetDishResponse>(response);
+            
+            Dishes.Add(responseObj);
+        }
     }
     
     //Получить все блюда
     private async Task<ObservableCollection<GetDishResponse>> GetAllDishes()
     {
-        var response = await _httpClient.GetAsync(_options.Host + "/api/Admin/Dishes");
+        var response = await _httpClient.GetAsync(_options.Host + "/api/Kitchen/Dishes");
 
         var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishResponse>>(response);
 
