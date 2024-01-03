@@ -24,7 +24,10 @@ namespace Client.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+<<<<<<< HEAD
         }
+=======
+>>>>>>> 85da2092a5d9599e2cb447969e3404b414b36043
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {

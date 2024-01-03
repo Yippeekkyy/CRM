@@ -20,7 +20,11 @@ public partial class AdminControl : UserControl
         win.Show();
     }
 
+<<<<<<< HEAD
     private void OpenAddDish(object sender, RoutedEventArgs e) 
+=======
+    private void OpenAddDish(object sender, RoutedEventArgs e)
+>>>>>>> 85da2092a5d9599e2cb447969e3404b414b36043
     {
         var win = new AddDish(_viewModel);
         win.Show();

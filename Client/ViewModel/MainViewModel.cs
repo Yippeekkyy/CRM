@@ -26,6 +26,7 @@ using MyCRM.Model;
 using MyCRM.Requests;
 using MyCRM.Responses;
 using Newtonsoft.Json;
+using MyCRM.Model;
 
 namespace Client.ViewModel;
 
@@ -35,6 +36,7 @@ public class MainViewModel : BaseViewModel
     private readonly HttpClient _httpClient;
 
     private GetWaiterResponse _selectedWaiter { get; set; }
+    private GetDishResponse _selectedDish { get; set; }
 
    
     
@@ -79,13 +81,16 @@ public class MainViewModel : BaseViewModel
     private void InitializeCommands()
     {
         SomeCommand = new TriggerCommand(NewTableSomeCommand);
+        
         OpenEditWaiterFormCommand = new TriggerCommand<object>(HandleOpenEditWaiterForm);
         OpenAddWaiterFormCommand = new TriggerCommand(HandleOpenAddWaiterForm);
         OpenAddDishFormCommand = new TriggerCommand(HandleOpenAddDishForm);
+        
         AddWaiterCommand = new TriggerCommand(HandleAddWaiter);
         AddDishCommand = new TriggerCommand(HandleAddDish);
+        
         DeleteWaiterCommand = new TriggerCommand<object>(HandleDeleteWaiter);
-
+        
         EditWaiterCommand = new TriggerCommand(HandleEditWaiterCommand);
     }
 
@@ -152,10 +157,7 @@ public class MainViewModel : BaseViewModel
         }
     }
     
-
-
-
-
+    
     //Получить всех официантов
     private async Task<ObservableCollection<GetWaiterResponse>> GetAllWaiters()
     {
@@ -173,10 +175,18 @@ public class MainViewModel : BaseViewModel
     private async void HandleAddDish() 
     {
         var response = await _httpClient.PostAsJsonAsync(_options.Host + "/api/Kitchen/Dish", AddDishRequest);
+<<<<<<< HEAD
         if (response.IsSuccessStatusCode)
         {
             var responseObj = await ResponseHandler.DeserializeAsync<GetDishResponse>(response);
 
+=======
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseObj = await ResponseHandler.DeserializeAsync<GetDishResponse>(response);
+            
+>>>>>>> 85da2092a5d9599e2cb447969e3404b414b36043
             Dishes.Add(responseObj);
         }
     }

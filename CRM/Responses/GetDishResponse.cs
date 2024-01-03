@@ -4,7 +4,7 @@ namespace MyCRM.Responses
 {
     public class GetDishResponse
     {
-        public int Id { get; set; }
+        public int DishId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
 
@@ -15,7 +15,7 @@ namespace MyCRM.Responses
 
         public GetDishResponse(Dish dish)
         {
-            Id = dish.DishId;
+            DishId = dish.DishId;
             Name = dish.Name;
             Price = dish.Price;
         }
