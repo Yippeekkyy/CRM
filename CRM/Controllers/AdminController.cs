@@ -57,7 +57,7 @@ namespace MyCRM.Controllers
         }
         
         [HttpPut("Waiter/{id}")]
-        public async Task<GetWaiterResponse> EditWaiter(int id, [FromBody]EditWaiterRequest waiter) // ToDo Переписать, метод должен принимать только id
+        public async Task<GetWaiterResponse> EditWaiter(int id, [FromBody]EditWaiterRequest waiter) 
         {
             var waiterToUpdate = await _dbContext.Waiters.FindAsync(id);
             waiterToUpdate.FirstName = waiter.FirstName;

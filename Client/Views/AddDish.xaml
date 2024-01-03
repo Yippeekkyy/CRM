@@ -29,7 +29,7 @@
         </Grid>
         <Grid Grid.Row="2" Grid.Column="0" Margin="5,5,5,5" Grid.RowSpan="2">
             <StackPanel Margin="0,0,10,0" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Cancel" Margin="10" Width="80"/>
+                <Button Content="Cancel" Margin="10" Width="80" Click="Close_Click"/>
                 <Button Content="Submit" Margin="10" Width="80" Command="{Binding AddDishCommand}"  />
             </StackPanel>
         </Grid>

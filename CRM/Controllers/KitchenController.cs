@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Common;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using MyCRM.Database;
 using MyCRM.Model;
 using MyCRM.Requests;
@@ -54,7 +48,7 @@ namespace MyCRM.Controllers
         }
 
         [HttpPut("Category/{id}")]
-        public async Task<GetCategoryResponse> EditCategory(int id, [FromBody] EditCategoryRequest category) // ToDo Переписать, метод должен принимать только id
+        public async Task<GetCategoryResponse> EditCategory(int id, [FromBody] EditCategoryRequest category) 
         {
             var categoryToUpdate = await _dbContext.Categories.FindAsync(id);
             categoryToUpdate.Name = category.Name;

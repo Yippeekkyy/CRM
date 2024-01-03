@@ -50,7 +50,9 @@
             
             <TabItem Header="Блюда" Height="20" VerticalAlignment="Top">
                 <StackPanel>
+                    
                     <Button Width="150" Height="40" Margin="0 5"  HorizontalAlignment="Left" Command="{Binding OpenAddDishFormCommand}">Добавить блюдо</Button>
+                    
                     <ListView ItemsSource="{Binding Dishes}">
                         
                         <ListView.View>

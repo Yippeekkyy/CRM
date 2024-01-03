@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using Azure;
 using Client.Base;
 using Client.Commands;
 using Client.Options;
@@ -118,7 +119,7 @@ public class MainViewModel : BaseViewModel
     }
     private void HandleOpenAddDishForm()
     {
-        var win = new AddDish();
+        var win = new AddDish(this);
         win.Show();
     }
 
@@ -169,16 +170,21 @@ public class MainViewModel : BaseViewModel
     
     
     //Добавить блюдо
-    private async void HandleAddDish() // Todo переписать по образцу с официантами
+    private async void HandleAddDish() 
     {
-        await _httpClient.PostAsJsonAsync(_options.Host + "/api/Admin/Dish", AddDishRequest); 
-        Dishes = await GetAllDishes();
+        var response = await _httpClient.PostAsJsonAsync(_options.Host + "/api/Kitchen/Dish", AddDishRequest);
+        if (response.IsSuccessStatusCode)
+        {
+            var responseObj = await ResponseHandler.DeserializeAsync<GetDishResponse>(response);
+
+            Dishes.Add(responseObj);
+        }
     }
     
     //Получить все блюда
     private async Task<ObservableCollection<GetDishResponse>> GetAllDishes()
     {
-        var response = await _httpClient.GetAsync(_options.Host + "/api/Admin/Dishes");
+        var response = await _httpClient.GetAsync(_options.Host + "/api/Kitchen/Dishes");
 
         var responseObj = await ResponseHandler.DeserializeAsync<ObservableCollection<GetDishResponse>>(response);
 
